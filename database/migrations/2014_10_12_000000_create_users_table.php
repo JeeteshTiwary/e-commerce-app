@@ -16,11 +16,6 @@ return new class extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
-            $table->string('contact_no')->unique();
-            $table->timestamp('contact_no_verified_at')->nullable();
-            $table->string('address');
-            $table->foreignId('role_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
-            $table->tinyInteger('status')->default('1')->comment('0-inactive, 1-active');
             $table->string('password');
             $table->rememberToken();
             $table->timestamps();

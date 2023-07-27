@@ -121,7 +121,8 @@
                                      <!--begin:Menu item-->
                                      <div class="menu-item">
                                          <!--begin:Menu link-->
-                                         <a class="menu-link" href="admin/dist/apps/ecommerce/catalog/add-product.html">
+                                         <a class="menu-link"
+                                             href="/admin/dist/apps/ecommerce/catalog/add-product.html">
                                              <span class="menu-bullet">
                                                  <span class="bullet bullet-dot"></span>
                                              </span>

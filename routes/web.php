@@ -31,4 +31,4 @@ Route::middleware('auth')->group(function () {
 
 require __DIR__ . '/auth.php';
 
-Route::get('/verifyuser', [VerifyUserController::class, 'verifyuser'])->name('verifyuser');
+Route::get('/verifyuser', [VerifyUserController::class, 'verifyuser'])->middleware(['auth', 'verified'])->name('verifyuser');
