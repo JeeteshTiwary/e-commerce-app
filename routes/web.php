@@ -2,7 +2,8 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VerifyUserController;
-use App\Http\Controllers\UserInfoController;
+use App\Http\Controllers\AdminController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -33,4 +34,14 @@ Route::middleware('auth')->group(function () {
 require __DIR__ . '/auth.php';
 
 Route::get('/verifyuser', [VerifyUserController::class, 'verifyuser'])->middleware(['auth', 'verified'])->name('verifyuser');
-Route::resource('user-info', UserInfoController::class)->middleware(['auth', 'verified']);
+
+Route::controller(AdminController::class)->prefix('admin')->name('admin.')->group(function () {
+    Route::get('/home', 'home')->name('home');
+    Route::get('/profile', 'viewProfile')->name('profile');
+    
+})->middleware(['auth', 'verified']);
+
+Route::controller(UserController::class)->name('user.')->group(function () {
+    Route::get('/home', 'home')->name('home');
+    
+});

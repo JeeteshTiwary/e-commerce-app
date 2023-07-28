@@ -6,7 +6,12 @@ use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
-    public function verifyAdmin(){
-        return view('index');
+    public function home(){
+        return view('admin.app');
     }
+    
+    public function viewProfile(){
+        return view('profile.edit');
+    }
+    
 }
