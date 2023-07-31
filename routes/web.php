@@ -29,6 +29,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+
+    Route::resource('Brands', BrandController::class);
 });
 
 require __DIR__ . '/auth.php';
@@ -37,7 +39,7 @@ Route::get('/verifyuser', [VerifyUserController::class, 'verifyuser'])->middlewa
 
 Route::controller(AdminController::class)->prefix('admin')->name('admin.')->group(function () {
     Route::get('/home', 'home')->name('home');
-    Route::get('/profile', 'viewProfile')->name('profile');
+    // Route::get('/profile', 'editProfile')->name('profile');
     
 })->middleware(['auth', 'verified']);
 
