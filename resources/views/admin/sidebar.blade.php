@@ -6,7 +6,7 @@
              <div class="app-sidebar-logo px-6" id="kt_app_sidebar_logo">
                  <!--begin::Logo image-->
                  <a href="javascript:void(0)">
-                     <img alt="Logo" src="admin/dist/assets/media/logos/e-commerce-app-logo.jpg"
+                     <img alt="Logo" src="{{ asset('admin/dist/assets/media/logos/e-commerce-app-logo.jpg')}}"
                          class="h-25px app-sidebar-logo-default" />
                      E-Commerce App
                  </a>

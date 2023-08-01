@@ -23,18 +23,18 @@
     <meta property="og:url" content="https://keenthemes.com/metronic" />
     <meta property="og:site_name" content="Keenthemes | Metronic" />
     <link rel="canonical" href="https://preview.keenthemes.com/metronic8" />
-    <link rel="shortcut icon" href="admin/dist/assets/media/logos/favicon.ico" />
+    <link rel="shortcut icon" href="{{asset('admin/dist/assets/media/logos/favicon.ico')}}" />
     <!--begin::Fonts(mandatory for all pages)-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Inter:300,400,500,600,700" />
     <!--end::Fonts-->
     <!--begin::Vendor Stylesheets(used for this page only)-->
-    <link href="admin/dist/assets/plugins/custom/fullcalendar/fullcalendar.bundle.css" rel="stylesheet"
+    <link href="{{asset('admin/dist/assets/plugins/custom/fullcalendar/fullcalendar.bundle.css')}}" rel="stylesheet"
         type="text/css" />
-    <link href="admin/dist/assets/plugins/custom/datatables/datatables.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="{{asset('admin/dist/assets/plugins/custom/datatables/datatables.bundle.css')}}" rel="stylesheet" type="text/css" />
     <!--end::Vendor Stylesheets-->
     <!--begin::Global Stylesheets Bundle(mandatory for all pages)-->
-    <link href="admin/dist/assets/plugins/global/plugins.bundle.css" rel="stylesheet" type="text/css" />
-    <link href="admin/dist/assets/css/style.bundle.css" rel="stylesheet" type="text/css" />
+    <link href="{{asset('admin/dist/assets/plugins/global/plugins.bundle.css')}}" rel="stylesheet" type="text/css" />
+    <link href="{{asset('admin/dist/assets/css/style.bundle.css')}}" rel="stylesheet" type="text/css" />
     <!--end::Global Stylesheets Bundle-->
 </head>
 <!--end::Head-->
@@ -82,61 +82,77 @@
                 <!--end::Sidebar-->
                 <!--begin::Main-->
                 <div class="app-main flex-column flex-row-fluid" id="kt_app_main">
-                    <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
-                        <!--begin::Toolbar container-->
-                        <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
-                            <!--begin::Page title-->
-                            <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
-                                <!--begin::Title-->
-                                <h1
-                                    class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">
-                                    E-Commerce App</h1>
-                                <!--end::Title-->
-                                <!--begin::Breadcrumb-->
-                                <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
-                                    <!--begin::Item-->
-                                    <li class="breadcrumb-item text-muted">
-                                        <a href="{{ route('admin.home') }}" class="text-muted text-hover-primary">Home</a>
-                                    </li>
-                                    <!--end::Item-->
-                                    <!--begin::Item-->
-                                    <li class="breadcrumb-item">
-                                        <span class="bullet bg-gray-400 w-5px h-2px"></span>
-                                    </li>
-                                    <!--end::Item-->
-                                    <!--begin::Item-->
-                                    <li class="breadcrumb-item text-muted">Dashboards</li>
-                                    <!--end::Item-->
-                                </ul>
-                                <!--end::Breadcrumb-->
+                    <!--begin::Content wrapper-->
+                    <div class="d-flex flex-column flex-column-fluid">
+                        <!--begin::Toolbar-->
+                        <div id="kt_app_toolbar" class="app-toolbar py-3 py-lg-6">
+                            <!--begin::Toolbar container-->
+                            <div id="kt_app_toolbar_container" class="app-container container-fluid d-flex flex-stack">
+                                <!--begin::Page title-->
+                                <div class="page-title d-flex flex-column justify-content-center flex-wrap me-3">
+                                    <!--begin::Title-->
+                                    <h1
+                                        class="page-heading d-flex text-dark fw-bold fs-3 flex-column justify-content-center my-0">
+                                        E-Commerce App</h1>
+                                    <!--end::Title-->
+                                    <!--begin::Breadcrumb-->
+                                    <ul class="breadcrumb breadcrumb-separatorless fw-semibold fs-7 my-0 pt-1">
+                                        <!--begin::Item-->
+                                        <li class="breadcrumb-item text-muted">
+                                            <a href="{{ route('admin.home') }}"
+                                                class="text-muted text-hover-primary">Home</a>
+                                        </li>
+                                        <!--end::Item-->
+                                        <!--begin::Item-->
+                                        <li class="breadcrumb-item">
+                                            <span class="bullet bg-gray-400 w-5px h-2px"></span>
+                                        </li>
+                                        <!--end::Item-->
+                                        <!--begin::Item-->
+                                        <li class="breadcrumb-item text-muted">Dashboards</li>
+                                        <!--end::Item-->
+                                    </ul>
+                                    <!--end::Breadcrumb-->
+                                </div>
+                                <!--end::Page title-->
+                                <!--begin::Actions-->
+                                <div class="d-flex align-items-center gap-2 gap-lg-3">
+                                    <!--begin::Primary button-->
+                                    <a href="#" class="btn btn-sm fw-bold btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#kt_modal_new_target">Add Target</a>
+                                    <!--end::Primary button-->
+                                </div>
+                                <!--end::Actions-->
                             </div>
-                            <!--end::Page title-->
-                            <!--begin::Actions-->
-                            <div class="d-flex align-items-center gap-2 gap-lg-3">
-                                <!--begin::Primary button-->
-                                <a href="#" class="btn btn-sm fw-bold btn-primary" data-bs-toggle="modal"
-                                    data-bs-target="#kt_modal_new_target">Add Target</a>
-                                <!--end::Primary button-->
-                            </div>
-                            <!--end::Actions-->
+                            <!--end::Toolbar container-->
                         </div>
-                        <!--end::Toolbar container-->
+                        <!--end::Toolbar-->
+                        <!--begin::Content-->
+                        <div id="kt_app_content" class="app-content flex-column-fluid">
+
+                            @if (Auth::user()->role_id == 2)
+                                @switch(Request::url())
+                                    @case('http://127.0.0.1:8000/admin/home')
+                                        @yield('dashboard')
+                                    @break
+
+                                    @case('http://127.0.0.1:8000/profile')
+                                        @yield('editProfile')
+                                    @break
+
+                                    @case('http://127.0.0.1:8000/brand')
+                                        @yield('brandList')
+                                    @break
+
+                                    @case('http://127.0.0.1:8000/brand/create')
+                                        @yield('createBrand')
+                                    @break
+
+                                    @default
+                                @endswitch
+                            @endif
+                        </div>
+                        <!--end::Content-->
                     </div>
-                    @if (Auth::user()->role_id == 2)
-                        @switch(Request::url())
-                            @case('http://127.0.0.1:8000/admin/home')
-                                @yield('dashboard')
-                            @break
-
-                            @case('http://127.0.0.1:8000/profile')
-                            @yield('editProfile')
-
-                            @break
-
-                            @default
-                        @endswitch
-                    @endif
-                </div>
-                <!--end:::Main-->
-
-                @include('admin.footer')
+                    <!--end::Content wrapper-->
+                    @include('admin.footer')

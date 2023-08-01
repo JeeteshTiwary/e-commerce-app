@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\VerifyUserController;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\BrandController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -30,7 +31,7 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::resource('Brands', BrandController::class);
+    Route::resource('brand', BrandController::class);
 });
 
 require __DIR__ . '/auth.php';
@@ -39,7 +40,7 @@ Route::get('/verifyuser', [VerifyUserController::class, 'verifyuser'])->middlewa
 
 Route::controller(AdminController::class)->prefix('admin')->name('admin.')->group(function () {
     Route::get('/home', 'home')->name('home');
-    // Route::get('/profile', 'editProfile')->name('profile');
+    Route::get('/profile', 'editProfile')->name('profile');
     
 })->middleware(['auth', 'verified']);
 
