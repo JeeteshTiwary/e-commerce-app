@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('brands', function (Blueprint $table) {
-            $table->string('url')->change();
+            $table->string('url')->nullable()->change();
             $table->string('description')->nullable();
             $table->tinyInteger('status')->default('1')->comment('0-unpublished, 1-published, 2-scheduled');
             $table->unsignedBigInteger('created_by')->nullable()->change();
@@ -28,6 +28,7 @@ return new class extends Migration
         Schema::table('brands', function (Blueprint $table) {
             $table->string('url')->nullable();
             $table->dropColumn('status');
+            $table->dropColumn('description');
             $table->unsignedBigInteger('created_by');
             $table->unsignedBigInteger('updated_by');  
         });

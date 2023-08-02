@@ -25,7 +25,7 @@ class BrandController extends Controller
      */
     public function create()
     {
-        return view('brand.create');
+        return view('brand.createBrand');
     }
 
     /**
@@ -44,27 +44,45 @@ class BrandController extends Controller
         }
         $create = Brand::create($validated);
         if ($create) {
-            $request->session()->flash("brand_name", $validated['brand_name']);
-            return redirect('brand.index');
+            $request->session()->flash("success", $validated['name'] . 'brand has been added successfully!!');
+            return redirect()->route('brand.index');
         }
-        $request->session()->flash("msg", 'Something went Wrong!!');
-        return redirect('brand.index');
+        $request->session()->flash("message", 'Something went Wrong!!');
+        return redirect()->route('brand.index');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $id, Request $request)
     {
-        //
+        try {
+            $id = decrypt($id);
+            $brand = Brand::findOrfail($id);
+            if ($brand) {
+                return view('brand.editBrand', ['brand' => $brand]);
+            }
+        } catch (\Throwable $th) {
+            $request->session()->flash("message", 'Requested Brand doesn\'t exit!!');
+            return redirect()->route('brand.index');
+        }
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $id, Request $request)
     {
-        //
+        try {
+            $id = decrypt($id);
+            $brand = Brand::findOrfail($id);
+            if ($brand) {
+                return view('brand.editBrand', ['brand' => $brand]);
+            }
+        } catch (\Throwable $th) {
+            $request->session()->flash("message", 'Requested Brand doesn\'t exit!!');
+            return redirect()->route('brand.index');
+        }
     }
 
     /**
@@ -72,14 +90,61 @@ class BrandController extends Controller
      */
     public function update(UpdateBrandRequest $request, string $id)
     {
-        //
+        $id = decrypt($id);
+        try {
+            $data = Brand::findOrfail($id);
+            if ($data) {
+                $validated = $request->validated();
+                if ($request->hasFile('logo')) {
+                    $file = $request->file('logo');
+                    $extension = $file->getClientOriginalExtension();
+                    $fileName = time() . '.' . $extension;
+                    $path = public_path('brands/logos');
+                    $uplaod = $file->move($path, $fileName);
+                    if ($data->logo && file_exists($path . '/' . $data->logo)) {
+                        unlink($path . '/' . $data->logo);
+                    }
+                    $validated['logo'] = $fileName;
+                }
+                $success = Brand::save($validated);
+                if ($success) {
+                    $request->session()->flash("success", $validated->name . ' brand has been updated successfully!!');
+                    return redirect()->route('brand.index');
+                }
+                $request->session()->flash("message", 'Something went Wrong!!');
+                return redirect()->route('brand.index');
+            }
+        } catch (\Throwable $th) {
+            $request->session()->flash("message", 'Requested Brand doesn\'t exit!!');
+            return redirect()->route('brand.index');
+        }
     }
+
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $id, Request $request)
     {
-        //
+        try {
+            $id = decrypt($id);
+            $brand = Brand::findOrfail($id);
+            if ($brand) {
+                $path = public_path('brands/logos');
+                if (file_exists(file_exists($path . '/' . $brand->logo))) {
+                    unlink($path . '/' . $brand->logo);
+                }
+                $delete = $brand->delete();
+                if ($delete) {
+                    $request->session()->flash("success", $brand->name . ' brand has been deleted successfully!!');
+                    return redirect()->route('brand.index');
+                }
+                $request->session()->flash("message", 'Something went Wrong!!');
+                return redirect()->route('brand.index');
+            }
+        } catch (\Throwable $th) {
+            $request->session()->flash("message", 'Requested Brand doesn\'t exit!!');
+            return redirect()->route('brand.index');
+        }
     }
 }

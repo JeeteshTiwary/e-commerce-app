@@ -40,6 +40,7 @@ Route::get('/verifyuser', [VerifyUserController::class, 'verifyuser'])->middlewa
 
 Route::controller(AdminController::class)->prefix('admin')->name('admin.')->group(function () {
     Route::get('/home', 'home')->name('home');
+    Route::get('/dashboard', 'dashboard')->name('dashboard');
     Route::get('/profile', 'editProfile')->name('profile');
     
 })->middleware(['auth', 'verified']);

@@ -1,6 +1,6 @@
 @extends('admin.home')
 
-@section('createBrand')
+@section('content')
     <!--begin::Content container-->
     <div id="kt_app_content_container" class="app-container container-xxl">
         <!--begin::Form-->
@@ -179,6 +179,7 @@
                                         <div class="text-muted fs-7">Set a description to the category for better
                                             visibility.</div>
                                         <!--end::Description-->
+                                        <span class="text-danger"> {{ $errors->first('description') }} </span>
                                     </div>
                                     <!--end::Input group-->
                                     <!--begin::Input group-->

@@ -27,7 +27,7 @@ class BrandObserver
     public function updated(Brand $brand): void
     {
         $brand->updated_by = auth()->id();
-        $brand->save();        
+        // $brand->save();        
     }
 
     /**
