@@ -15,6 +15,8 @@ class BrandController extends Controller
     public function index()
     {
         $brands = Brand::all();
+        // dd($brands);
+        
         return view('brand.brandList', [
             'brands' => $brands,
         ]);
@@ -92,8 +94,8 @@ class BrandController extends Controller
     {
         $id = decrypt($id);
         try {
-            $data = Brand::findOrfail($id);
-            if ($data) {
+            $brand = Brand::findOrfail($id);
+            if ($brand) {
                 $validated = $request->validated();
                 if ($request->hasFile('logo')) {
                     $file = $request->file('logo');
@@ -101,14 +103,20 @@ class BrandController extends Controller
                     $fileName = time() . '.' . $extension;
                     $path = public_path('brands/logos');
                     $uplaod = $file->move($path, $fileName);
-                    if ($data->logo && file_exists($path . '/' . $data->logo)) {
-                        unlink($path . '/' . $data->logo);
+                    if ($brand->logo && file_exists($path . '/' . $brand->logo)) {
+                        unlink($path . '/' . $brand->logo);
                     }
                     $validated['logo'] = $fileName;
-                }
-                $success = Brand::save($validated);
+                }   
+
+                $success = $brand->fill($validated)->save();
                 if ($success) {
-                    $request->session()->flash("success", $validated->name . ' brand has been updated successfully!!');
+                dd($success);
+
+                    $success = $validated->name . ' brand has been updated successfully!!';
+                dd($success);
+
+                    $request->session()->flash("success", $success );                    
                     return redirect()->route('brand.index');
                 }
                 $request->session()->flash("message", 'Something went Wrong!!');

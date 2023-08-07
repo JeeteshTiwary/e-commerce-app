@@ -14,8 +14,14 @@
             <!--end::Toolbar-->
             <!--begin::Content-->
             <div id="kt_app_content" class="app-content flex-column-fluid">
-                @if (Auth::user()->role_id == 2)
+                @if (Auth::user()->role_id == 1)
                     @yield('content')
+                @else
+                    <center>
+                        <h1 class="display-6">
+                            {{ 'You Don\'t have access for this page.' }}
+                        </h1>
+                    </center>
                 @endif
             </div>
             <!--end::Content-->

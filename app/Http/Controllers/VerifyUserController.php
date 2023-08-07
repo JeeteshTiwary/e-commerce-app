@@ -11,7 +11,7 @@ class VerifyUserController extends Controller
 {
     public function verifyuser()
     {
-        $is_admin = (Auth::user()->role_id == 2) ? true : false;
+        $is_admin = (Auth::user()->role_id == 1) ? true : false;
         if ($is_admin) {
             return redirect()->route('admin.home');
         }

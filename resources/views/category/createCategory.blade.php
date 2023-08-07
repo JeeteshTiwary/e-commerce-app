@@ -3,19 +3,19 @@
 @section('content')
     <!--begin::Content container-->
     <div id="kt_app_content_container" class="app-container container-xxl">
-        <form id="kt_ecommerce_add_Brand_form" class="form d-flex flex-column flex-lg-row"
-            action="{{ route('brand.update', encrypt($brand->id)) }}" method="post" enctype="multipart/form-data">
+        <form id="kt_ecommerce_add_category_form" class="form d-flex flex-column flex-lg-row"
+            data-kt-redirect="../../demo1/dist/apps/ecommerce/catalog/categories.html" method="post" action="{{route('category.store')}}">
             @csrf
-            @method('PATCH')
+            @method('POST')
             <!--begin::Aside column-->
             <div class="d-flex flex-column gap-7 gap-lg-10 w-100 w-lg-300px mb-7 me-lg-10">
-                <!--begin::Logo settings-->
+                <!--begin::Thumbnail settings-->
                 <div class="card card-flush py-4">
                     <!--begin::Card header-->
                     <div class="card-header">
                         <!--begin::Card title-->
                         <div class="card-title">
-                            <h2>Logo</h2>
+                            <h2>Thumbnail</h2>
                         </div>
                         <!--end::Card title-->
                     </div>
@@ -23,49 +23,58 @@
                     <!--begin::Card body-->
                     <div class="card-body text-center pt-0">
                         <!--begin::Image input-->
+                        <!--begin::Image input placeholder-->
+                        <style>
+                            .image-input-placeholder {
+                                background-image: url({{ asset('admin/dist/assets/media/svg/files/blank-image.svg')}});
+                            }
+
+                            [data-bs-theme="dark"] .image-input-placeholder {
+                                background-image: url({{ asset('admin/dist/assets/media/svg/files/blank-image-dark.svg')}});
+                            }
+                        </style>
+                        <!--end::Image input placeholder-->
                         <!--begin::Image input-->
                         <div class="image-input image-input-empty image-input-outline image-input-placeholder mb-3"
                             data-kt-image-input="true">
-                            <!--begin::Preview existing logo-->
-                            <div class="image-input-wrapper w-150px h-150px"
-                                style="background-image:url({{ asset('brands/logos') . '/' . $brand->logo }});"></div>
-                            <!--end::Preview existing logo-->
+                            <!--begin::Preview existing thumbnail-->
+                            <div class="image-input-wrapper w-150px h-150px"></div>
+                            <!--end::Preview existing thumbnail-->
                             <!--begin::Label-->
                             <label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
-                                data-kt-image-input-action="change" data-bs-toggle="tooltip" title="Change logo">
+                                data-kt-image-input-action="change" data-bs-toggle="tooltip" title="Change thumbnail">
                                 <!--begin::Icon-->
                                 <i class="bi bi-pencil-fill fs-7"></i>
                                 <!--end::Icon-->
                                 <!--begin::Inputs-->
-                                <input type="file" name="logo" value="{{ $brand->logo }}" accept=".png, .jpg, .jpeg" />
-                                <input type="hidden" name="logo_remove" />
+                                <input type="file" name="thumbnail" accept=".png, .jpg, .jpeg" />
+                                <input type="hidden" name="thumbnail_remove" />
                                 <!--end::Inputs-->
                             </label>
                             <!--end::Label-->
                             <!--begin::Cancel-->
                             <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
-                                data-kt-image-input-action="cancel" data-bs-toggle="tooltip" title="Cancel logo">
+                                data-kt-image-input-action="cancel" data-bs-toggle="tooltip" title="Cancel thumbnail">
                                 <i class="bi bi-x fs-2"></i>
                             </span>
                             <!--end::Cancel-->
                             <!--begin::Remove-->
                             <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
-                                data-kt-image-input-action="remove" data-bs-toggle="tooltip" title="Remove logo">
+                                data-kt-image-input-action="remove" data-bs-toggle="tooltip" title="Remove thumbnail">
                                 <i class="bi bi-x fs-2"></i>
                             </span>
                             <!--end::Remove-->
                         </div>
                         <!--end::Image input-->
                         <!--begin::Description-->
-                        <div class="text-muted fs-7">Set the Brand Logo image. Only *.png, *.jpg and *.jpeg
-                            image files are accepted</div>
+                        <div class="text-muted fs-7">Set the category thumbnail image. Only *.png, *.jpg and *.jpeg image
+                            files are accepted</div>
                         <!--end::Description-->
-                        <span class="text-danger"> {{ $errors->first('logo') }} </span>
+                        <span class="text-danger"> {{ $errors->first('thumbnail') }} </span>
                     </div>
                     <!--end::Card body-->
                 </div>
-                <!--end::Logo settings-->
-                <input type="hidden" name="updateId" value="{{ encrypt($brand->id) }}" />
+                <!--end::Thumbnail settings-->
                 <!--begin::Status-->
                 <div class="card card-flush py-4">
                     <!--begin::Card header-->
@@ -77,7 +86,7 @@
                         <!--end::Card title-->
                         <!--begin::Card toolbar-->
                         <div class="card-toolbar">
-                            <div class="rounded-circle bg-success w-15px h-15px" id="kt_ecommerce_add_Brand_status">
+                            <div class="rounded-circle bg-success w-15px h-15px" id="kt_ecommerce_add_category_status">
                             </div>
                         </div>
                         <!--begin::Card toolbar-->
@@ -87,21 +96,21 @@
                     <div class="card-body pt-0">
                         <!--begin::Select2-->
                         <select class="form-select mb-2" data-control="select2" data-hide-search="true"
-                            data-placeholder="Select an option" id="kt_ecommerce_add_Brand_status_select" name="status">
+                            data-placeholder="Select an option" id="kt_ecommerce_add_category_status_select" name="status">
                             <option></option>
-                            <option value="1" {{$brand->status =='1'?'selected':null}}>Published</option>
-                            <option value="2" {{$brand->status =='2'?'selected':null}}>Scheduled</option>
-                            <option value="0" {{$brand->status =='0'?'selected':null}}>Unpublished</option>
+                            <option value="1" selected="selected">Published</option>
+                            <option value="2">Scheduled</option>
+                            <option value="0">Unpublished</option>
                         </select>
                         <!--end::Select2-->
                         <!--begin::Description-->
-                        <div class="text-muted fs-7">Set the Brand status.</div>
+                        <div class="text-muted fs-7">Set the category status.</div>
                         <!--end::Description-->
                         <!--begin::Datepicker-->
                         <div class="d-none mt-10">
-                            <label for="kt_ecommerce_add_Brand_status_datepicker" class="form-label">Select
-                                publishing date and time</label>
-                            <input class="form-control" id="kt_ecommerce_add_Brand_status_datepicker"
+                            <label for="kt_ecommerce_add_category_status_datepicker" class="form-label">Select publishing
+                                date and time</label>
+                            <input class="form-control" id="kt_ecommerce_add_category_status_datepicker"
                                 placeholder="Pick date & time" />
                         </div>
                         <!--end::Datepicker-->
@@ -110,6 +119,40 @@
                     <!--end::Card body-->
                 </div>
                 <!--end::Status-->
+                <!--begin::Template settings-->
+                <div class="card card-flush py-4">
+                    <!--begin::Card header-->
+                    <div class="card-header">
+                        <!--begin::Card title-->
+                        <div class="card-title">
+                            <h2>Parent Category</h2>
+                        </div>
+                        <!--end::Card title-->
+                    </div>
+                    <!--end::Card header-->
+                    <!--begin::Card body-->
+                    <div class="card-body pt-0">
+                        <!--begin::Select store template-->
+                        <label for="kt_ecommerce_add_category_store_template" class="form-label">Select a parent
+                            category</label>
+                        <!--end::Select store template-->
+                        <!--begin::Select2-->
+                        <select class="form-select mb-2" data-control="select2" data-hide-search="true"
+                            data-placeholder="Select an option" id="kt_ecommerce_add_category_store_template" name="parent_category">
+                            <option></option>
+                            @foreach ($categories as $category)
+                            <option value="{{ $category->id }}">{{ $category->name }}</option>  
+                            @endforeach
+                        </select>
+                        <!--end::Select2-->
+                        <!--begin::Description-->
+                        <div class="text-muted fs-7">Set the parent category to the product (if any).</div>
+                        <!--end::Description-->
+                        <span class="text-danger"> {{ $errors->first('paren_category') }} </span>
+                    </div>
+                    <!--end::Card body-->
+                </div>
+                <!--end::Template settings-->
             </div>
             <!--end::Aside column-->
             <!--begin::Main column-->
@@ -119,7 +162,7 @@
                     <!--begin::Card header-->
                     <div class="card-header">
                         <div class="card-title">
-                            <h2>Brand Details</h2>
+                            <h2>General</h2>
                         </div>
                     </div>
                     <!--end::Card header-->
@@ -128,16 +171,16 @@
                         <!--begin::Input group-->
                         <div class="mb-10 fv-row">
                             <!--begin::Label-->
-                            <label class="required form-label">Brand Name</label>
+                            <label class="required form-label">Category Name</label>
                             <!--end::Label-->
                             <!--begin::Input-->
-                            <input type="text" name="name" class="form-control mb-2" placeholder="Brand name"
-                                value="{{ $brand->name }}" />
+                            <input type="text" name="name" class="form-control mb-2" placeholder="Product name"
+                                value="" />
                             <!--end::Input-->
                             <!--begin::Description-->
-                            <div class="text-muted fs-7">A Brand name is required and recommended to be unique.
-                            </div>
+                            <div class="text-muted fs-7">A category name is required and recommended to be unique.</div>
                             <!--end::Description-->
+                            <span class="text-danger"> {{ $errors->first('name') }} </span>
                         </div>
                         <!--end::Input group-->
                         <!--begin::Input group-->
@@ -146,33 +189,17 @@
                             <label class="form-label">Description</label>
                             <!--end::Label-->
                             <!--begin::Editor-->
-                            <div id="kt_ecommerce_add_Brand_description" name="kt_ecommerce_add_Brand_description"
+                            <div id="kt_ecommerce_add_category_description" name="kt_ecommerce_add_category_description"
                                 class="min-h-100px mb-2">
-                                <textarea id="description" name="description" rows="4" cols="50">{{ $brand->description }}. </textarea>
+                                <textarea id="description" name="description" rows="4" cols="110">
+                                </textarea>
                             </div>
                             <!--end::Editor-->
                             <!--begin::Description-->
-                            <div class="text-muted fs-7">Set a description to the Brand for better visibility.
-                            </div>
+                            <div class="text-muted fs-7">Set a description to the category for better visibility.</div>
                             <!--end::Description-->
+                            <span class="text-danger"> {{ $errors->first('description') }} </span>
                         </div>
-                        <!--end::Input group-->
-                        <!--begin::Input group-->
-                        <div>
-                            <!--begin::Label-->
-                            <label class="required form-label">Url</label>
-                            <!--end::Label-->
-                            <!--begin::Input-->
-                            <input type="url" name="url" class="form-control mb-2" placeholder="brand url"
-                                value="{{ $brand->url }}" />
-                            <!--end::Input-->
-                            <!--begin::Description-->
-                            <div class="text-muted fs-7">A brand url is the url of the website of the
-                                corresponding brand.
-                            </div>
-                            <!--end::Description-->
-                        </div>
-                        <span class="text-danger"> {{ $errors->first('url') }} </span>
                         <!--end::Input group-->
                     </div>
                     <!--end::Card header-->
@@ -180,11 +207,11 @@
                 <!--end::General options-->
                 <div class="d-flex justify-content-end">
                     <!--begin::Button-->
-                    <a href="{{ route('brand.index') }}" id="kt_ecommerce_add_Brand_cancel"
+                    <a href="{{route('category.index')}}" id="kt_ecommerce_add_product_cancel"
                         class="btn btn-light me-5">Cancel</a>
                     <!--end::Button-->
                     <!--begin::Button-->
-                    <button type="submit" id="kt_ecommerce_add_Brand_submit" class="btn btn-primary">
+                    <button type="submit" id="kt_ecommerce_add_category_submit" class="btn btn-primary">
                         <span class="indicator-label">Save Changes</span>
                         <span class="indicator-progress">Please wait...
                             <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>

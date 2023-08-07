@@ -56,7 +56,7 @@
                          <!--begin:Menu item-->
                          <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
                              <!--begin:Menu link-->
-                             <span class="menu-link">
+                             {{-- <span class="menu-link">
                                  <span class="menu-icon">
                                      <!--begin::Svg Icon | path: icons/duotune/ecommerce/ecm002.svg-->
                                      <span class="svg-icon svg-icon-2">
@@ -75,30 +75,20 @@
                                      </span>
                                      <!--end::Svg Icon-->
                                  </span>
-                                 <span class="menu-title">eCommerce</span>
+                                 <span class="menu-title">Brands</span>
                                  <span class="menu-arrow"></span>
-                             </span>
+                             </span> --}}
                              <!--end:Menu link-->
                              <!--begin:Menu sub-->
-                             <div class="menu-sub menu-sub-accordion">
+                             {{-- <div class="menu-sub menu-sub-accordion"> --}}
                                  <!--begin:Menu item-->
                                  <div data-kt-menu-trigger="click" class="menu-item menu-accordion">
-                                     <!--begin:Menu link-->
-                                     <span class="menu-link">
-                                         <span class="menu-bullet">
-                                             <span class="bullet bullet-dot"></span>
-                                         </span>
-                                         <span class="menu-title">Catalog</span>
-                                         <span class="menu-arrow"></span>
-                                     </span>
-                                     <!--end:Menu link-->
                                      <!--begin:Menu sub-->
-                                     <div class="menu-sub menu-sub-accordion">
                                          <!--begin:Menu item-->
                                          <div class="menu-item">
                                              <!--begin:Menu link-->
                                              <a class="menu-link"
-                                                 href="admin/dist/apps/ecommerce/catalog/products.html">
+                                                 href="{{ route('brand.index') }}">
                                                  <span class="menu-bullet">
                                                      <span class="bullet bullet-dot"></span>
                                                  </span>
@@ -111,7 +101,7 @@
                                          <div class="menu-item">
                                              <!--begin:Menu link-->
                                              <a class="menu-link"
-                                                 href="admin/dist/apps/ecommerce/catalog/products.html">
+                                                 href="{{ route('product.index') }}">
                                                  <span class="menu-bullet">
                                                      <span class="bullet bullet-dot"></span>
                                                  </span>
@@ -124,7 +114,7 @@
                                          <div class="menu-item">
                                              <!--begin:Menu link-->
                                              <a class="menu-link"
-                                                 href="admin/dist/apps/ecommerce/catalog/categories.html">
+                                                 href="{{ route('category.index') }}">
                                                  <span class="menu-bullet">
                                                      <span class="bullet bullet-dot"></span>
                                                  </span>
@@ -133,85 +123,6 @@
                                              <!--end:Menu link-->
                                          </div>
                                          <!--end:Menu item-->
-                                         <!--begin:Menu item-->
-                                         <div class="menu-item">
-                                             <!--begin:Menu link-->
-                                             <a class="menu-link"
-                                                 href="/admin/dist/apps/ecommerce/catalog/add-product.html">
-                                                 <span class="menu-bullet">
-                                                     <span class="bullet bullet-dot"></span>
-                                                 </span>
-                                                 <span class="menu-title">Add Brand</span>
-                                             </a>
-                                             <!--end:Menu link-->
-                                         </div>
-                                         <!--end:Menu item-->
-                                         <!--begin:Menu item-->
-                                         <div class="menu-item">
-                                             <!--begin:Menu link-->
-                                             <a class="menu-link"
-                                                 href="admin/dist/apps/ecommerce/catalog/edit-product.html">
-                                                 <span class="menu-bullet">
-                                                     <span class="bullet bullet-dot"></span>
-                                                 </span>
-                                                 <span class="menu-title">Edit Brand</span>
-                                             </a>
-                                             <!--end:Menu link-->
-                                         </div>
-                                         <!--end:Menu item-->
-                                         <!--begin:Menu item-->
-                                         <div class="menu-item">
-                                             <!--begin:Menu link-->
-                                             <a class="menu-link"
-                                                 href="/admin/dist/apps/ecommerce/catalog/add-product.html">
-                                                 <span class="menu-bullet">
-                                                     <span class="bullet bullet-dot"></span>
-                                                 </span>
-                                                 <span class="menu-title">Add Product</span>
-                                             </a>
-                                             <!--end:Menu link-->
-                                         </div>
-                                         <!--end:Menu item-->
-                                         <!--begin:Menu item-->
-                                         <div class="menu-item">
-                                             <!--begin:Menu link-->
-                                             <a class="menu-link"
-                                                 href="admin/dist/apps/ecommerce/catalog/edit-product.html">
-                                                 <span class="menu-bullet">
-                                                     <span class="bullet bullet-dot"></span>
-                                                 </span>
-                                                 <span class="menu-title">Edit Product</span>
-                                             </a>
-                                             <!--end:Menu link-->
-                                         </div>
-                                         <!--end:Menu item-->
-                                         <!--begin:Menu item-->
-                                         <div class="menu-item">
-                                             <!--begin:Menu link-->
-                                             <a class="menu-link"
-                                                 href="admin/dist/apps/ecommerce/catalog/add-category.html">
-                                                 <span class="menu-bullet">
-                                                     <span class="bullet bullet-dot"></span>
-                                                 </span>
-                                                 <span class="menu-title">Add Category</span>
-                                             </a>
-                                             <!--end:Menu link-->
-                                         </div>
-                                         <!--end:Menu item-->
-                                         <!--begin:Menu item-->
-                                         <div class="menu-item">
-                                             <!--begin:Menu link-->
-                                             <a class="menu-link"
-                                                 href="admin/dist/apps/ecommerce/catalog/edit-category.html">
-                                                 <span class="menu-bullet">
-                                                     <span class="bullet bullet-dot"></span>
-                                                 </span>
-                                                 <span class="menu-title">Edit Category</span>
-                                             </a>
-                                             <!--end:Menu link-->
-                                         </div>
-                                         <!--end:Menu item-->
-                                     </div>
                                      <!--end:Menu sub-->
                                  </div>
                                  <!--end:Menu item-->
@@ -405,7 +316,7 @@
                                      <!--end:Menu sub-->
                                  </div>
                                  <!--end:Menu item-->
-                             </div>
+                             {{-- </div> --}}
                              <!--end:Menu sub-->
                          </div>
                          <!--end:Menu item-->

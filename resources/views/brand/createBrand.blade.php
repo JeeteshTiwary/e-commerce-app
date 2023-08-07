@@ -27,11 +27,11 @@
                         <!--begin::Image input placeholder-->
                         <style>
                             .image-input-placeholder {
-                                background-image: url('assets/media/svg/files/blank-image.svg');
+                                background-image: url({{asset('admin/dist/assets/media/svg/files/blank-image.svg')}});
                             }
 
                             [data-bs-theme="dark"] .image-input-placeholder {
-                                background-image: url('assets/media/svg/files/blank-image-dark.svg');
+                                background-image: url({{ asset('admin/dist/assets/media/svg/files/blank-image-dark.svg')}});
                             }
                         </style>
                         <!--end::Image input placeholder-->
@@ -161,7 +161,6 @@
                                             to be unique.</div>
                                         <!--end::Description-->
                                         <span class="text-danger"> {{ $errors->first('name') }} </span>
-
                                     </div>
                                     <!--end::Input group-->
                                     <!--begin::Input group-->
@@ -171,7 +170,7 @@
                                         <!--end::Label-->
                                         <!--begin::Editor-->
                                         <div id="kt_ecommerce_add_category_description" class="min-h-100px">
-                                            <textarea id="description" name="description" rows="4" cols="50">
+                                            <textarea id="description" name="description" rows="4" cols="110">
                                             </textarea>
                                         </div>
                                         <!--end::Editor-->
@@ -217,7 +216,8 @@
                     <button type="submit" id="kt_ecommerce_add_brand_submit" class="btn btn-primary">
                         <span class="indicator-label">Save Changes</span>
                         <span class="indicator-progress">Please wait...
-                            <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
+                            <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                        </span>
                     </button>
                     <!--end::Button-->
                 </div>
