@@ -24,8 +24,7 @@ class createCategoryRequest extends FormRequest
         return [
             'name' => 'required|string|between:3,191',
             'thumbnail' => 'required|image|mimes:jpg,jpeg,png',
-            'status' => 'required|numeric',
-            'paren_category' => 'numeric',
+            'parent_id' => 'numeric',
             'description' => 'required|string|between:10,191',
         ];
     }

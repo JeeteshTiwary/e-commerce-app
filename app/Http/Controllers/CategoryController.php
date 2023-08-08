@@ -14,7 +14,9 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        return view('category.categoriesList');
+        $categories = Category::select('id','name','thumbnail','description','parent_id')->get();
+        // dd($categories);
+        return view('category.categoriesList',compact('categories'));
     }
 
     /**
@@ -22,8 +24,7 @@ class CategoryController extends Controller
      */
     public function create()
     {
-        $parentCategory = Category::where('parent_id' == 0);
-        // dd($parentCategory);
+        $parentCategory = Category::select('id', 'name')->get();
         return view('category.createCategory', [
             'categories' => $parentCategory,
         ]);
@@ -35,6 +36,7 @@ class CategoryController extends Controller
     public function store(createCategoryRequest $request)
     {
         $validated = $request->validated();
+
         if ($request->hasFile('thumbnail')) {
             $file = $request->file('thumbnail');
             $extension = $file->getClientOriginalExtension();
@@ -43,30 +45,51 @@ class CategoryController extends Controller
             $uplaod = $file->move($path, $fileName);
             $validated['thumbnail'] = $fileName;
         }
+
         $create = Category::create($validated);
+        dd($create);
+
         if ($create) {
             $request->session()->flash("success", $validated['name'] . 'category has been added successfully!!');
             return redirect()->route('category.index');
+        } else {
+            $request->session()->flash("message", 'Something went Wrong!!');
+            return redirect()->route('category.index');
         }
-        $request->session()->flash("message", 'Something went Wrong!!');
-        return redirect()->route('category.index');
-
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $id, Request $request)
     {
-        //
+        try {
+            $id = decrypt($id);
+            $category = Category::findOrfail($id);
+            if ($category) {
+                return view('category.editcategory', ['category' => $category]);
+            }
+        } catch (\Throwable $th) {
+            $request->session()->flash("message", 'Requested category doesn\'t exit!!');
+            return redirect()->route('category.index');
+        }
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(string $id, Request $request)
     {
-        return view('category.editCategory');
+        try {
+            $id = decrypt($id);
+            $category = Category::findOrfail($id);
+            if ($category) {
+                return view('category.editCategory', ['category' => $category]);
+            }
+        } catch (\Throwable $th) {
+            $request->session()->flash("message", 'Requested category doesn\'t exit!!');
+            return redirect()->route('category.index');
+        }
     }
 
     /**
@@ -80,8 +103,27 @@ class CategoryController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $id, Request $request)
     {
-        //
+        try {
+            $id = decrypt($id);
+            $category = Category::findOrfail($id);
+            if ($category) {
+                $path = public_path('categories/thumbnails');
+                if (file_exists(file_exists($path . '/' . $category->thumbnail))) {
+                    unlink($path . '/' . $category->thumbnail);
+                }
+                $delete = $category->delete();
+                if ($delete) {
+                    $request->session()->flash("success", $category->name . ' category has been deleted successfully!!');
+                    return redirect()->route('category.index');
+                }
+                $request->session()->flash("message", 'Something went Wrong!!');
+                return redirect()->route('category.index');
+            }
+        } catch (\Throwable $th) {
+            $request->session()->flash("message", 'Requested category doesn\'t exit!!');
+            return redirect()->route('category.index');
+        }
     }
 }

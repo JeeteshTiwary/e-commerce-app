@@ -154,7 +154,7 @@
                                                 action="{{ route('brand.destroy', encrypt($brand->id)) }}">
                                                 @csrf
                                                 @method('delete')
-                                                <a class="menu-link px-3">Delete</a>
+                                                <input class="menu-link px-3" data-kt-ecommerce-category-filter="delete_row" type="submit" value="Delete">
                                             </form>
                                         </div>
                                         <!--end::Menu item-->

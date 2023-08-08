@@ -4,7 +4,8 @@
     <!--begin::Content container-->
     <div id="kt_app_content_container" class="app-container container-xxl">
         <form id="kt_ecommerce_add_category_form" class="form d-flex flex-column flex-lg-row"
-            data-kt-redirect="../../demo1/dist/apps/ecommerce/catalog/categories.html" method="post" action="{{route('category.store')}}">
+            data-kt-redirect="../../demo1/dist/apps/ecommerce/catalog/categories.html" method="post"
+            action="{{ route('category.store') }}" enctype="multipart/form-data">
             @csrf
             @method('POST')
             <!--begin::Aside column-->
@@ -26,11 +27,11 @@
                         <!--begin::Image input placeholder-->
                         <style>
                             .image-input-placeholder {
-                                background-image: url({{ asset('admin/dist/assets/media/svg/files/blank-image.svg')}});
+                                background-image: url({{ asset('admin/dist/assets/media/svg/files/blank-image.svg') }});
                             }
 
                             [data-bs-theme="dark"] .image-input-placeholder {
-                                background-image: url({{ asset('admin/dist/assets/media/svg/files/blank-image-dark.svg')}});
+                                background-image: url({{ asset('admin/dist/assets/media/svg/files/blank-image-dark.svg') }});
                             }
                         </style>
                         <!--end::Image input placeholder-->
@@ -38,7 +39,7 @@
                         <div class="image-input image-input-empty image-input-outline image-input-placeholder mb-3"
                             data-kt-image-input="true">
                             <!--begin::Preview existing thumbnail-->
-                            <div class="image-input-wrapper w-150px h-150px"></div>
+                            <div class="image-input-wrapper w-150px h-120px"></div>
                             <!--end::Preview existing thumbnail-->
                             <!--begin::Label-->
                             <label class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
@@ -53,13 +54,13 @@
                             </label>
                             <!--end::Label-->
                             <!--begin::Cancel-->
-                            <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
+                            <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-20px bg-body shadow"
                                 data-kt-image-input-action="cancel" data-bs-toggle="tooltip" title="Cancel thumbnail">
                                 <i class="bi bi-x fs-2"></i>
                             </span>
                             <!--end::Cancel-->
                             <!--begin::Remove-->
-                            <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-25px bg-body shadow"
+                            <span class="btn btn-icon btn-circle btn-active-color-primary w-25px h-20px bg-body shadow"
                                 data-kt-image-input-action="remove" data-bs-toggle="tooltip" title="Remove thumbnail">
                                 <i class="bi bi-x fs-2"></i>
                             </span>
@@ -75,50 +76,6 @@
                     <!--end::Card body-->
                 </div>
                 <!--end::Thumbnail settings-->
-                <!--begin::Status-->
-                <div class="card card-flush py-4">
-                    <!--begin::Card header-->
-                    <div class="card-header">
-                        <!--begin::Card title-->
-                        <div class="card-title">
-                            <h2>Status</h2>
-                        </div>
-                        <!--end::Card title-->
-                        <!--begin::Card toolbar-->
-                        <div class="card-toolbar">
-                            <div class="rounded-circle bg-success w-15px h-15px" id="kt_ecommerce_add_category_status">
-                            </div>
-                        </div>
-                        <!--begin::Card toolbar-->
-                    </div>
-                    <!--end::Card header-->
-                    <!--begin::Card body-->
-                    <div class="card-body pt-0">
-                        <!--begin::Select2-->
-                        <select class="form-select mb-2" data-control="select2" data-hide-search="true"
-                            data-placeholder="Select an option" id="kt_ecommerce_add_category_status_select" name="status">
-                            <option></option>
-                            <option value="1" selected="selected">Published</option>
-                            <option value="2">Scheduled</option>
-                            <option value="0">Unpublished</option>
-                        </select>
-                        <!--end::Select2-->
-                        <!--begin::Description-->
-                        <div class="text-muted fs-7">Set the category status.</div>
-                        <!--end::Description-->
-                        <!--begin::Datepicker-->
-                        <div class="d-none mt-10">
-                            <label for="kt_ecommerce_add_category_status_datepicker" class="form-label">Select publishing
-                                date and time</label>
-                            <input class="form-control" id="kt_ecommerce_add_category_status_datepicker"
-                                placeholder="Pick date & time" />
-                        </div>
-                        <!--end::Datepicker-->
-                        <span class="text-danger"> {{ $errors->first('status') }} </span>
-                    </div>
-                    <!--end::Card body-->
-                </div>
-                <!--end::Status-->
                 <!--begin::Template settings-->
                 <div class="card card-flush py-4">
                     <!--begin::Card header-->
@@ -138,17 +95,19 @@
                         <!--end::Select store template-->
                         <!--begin::Select2-->
                         <select class="form-select mb-2" data-control="select2" data-hide-search="true"
-                            data-placeholder="Select an option" id="kt_ecommerce_add_category_store_template" name="parent_category">
+                            data-placeholder="Select an option" id="kt_ecommerce_add_category_store_template"
+                            name="parent_id">
                             <option></option>
                             @foreach ($categories as $category)
-                            <option value="{{ $category->id }}">{{ $category->name }}</option>  
+                                <option value="{{ $category->id }}"> {{ ucwords($category->name) }} </option>
                             @endforeach
+                            <option value="0"> none </option>
                         </select>
                         <!--end::Select2-->
                         <!--begin::Description-->
                         <div class="text-muted fs-7">Set the parent category to the product (if any).</div>
                         <!--end::Description-->
-                        <span class="text-danger"> {{ $errors->first('paren_category') }} </span>
+                        <span class="text-danger"> {{ $errors->first('parent_category') }} </span>
                     </div>
                     <!--end::Card body-->
                 </div>
@@ -207,7 +166,7 @@
                 <!--end::General options-->
                 <div class="d-flex justify-content-end">
                     <!--begin::Button-->
-                    <a href="{{route('category.index')}}" id="kt_ecommerce_add_product_cancel"
+                    <a href="{{ route('category.index') }}" id="kt_ecommerce_add_product_cancel"
                         class="btn btn-light me-5">Cancel</a>
                     <!--end::Button-->
                     <!--begin::Button-->
