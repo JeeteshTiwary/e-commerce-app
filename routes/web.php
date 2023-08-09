@@ -40,6 +40,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('category', CategoryController::class);
     Route::resource('customer', CustomerController::class);
     Route::resource('order', OrderController::class);
+    
+    Route::delete('/multiple-delete', [CategoryController::class, 'deleteMultiple'])->name('category.multiple-delete');
 });
 
 require __DIR__ . '/auth.php';

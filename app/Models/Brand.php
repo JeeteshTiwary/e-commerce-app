@@ -18,4 +18,9 @@ class Brand extends Model
         'updated_by', 
         'description', 
     ];
+
+    public function getNameAttribute($value)
+    {
+        return ucwords($value);
+    }
 }

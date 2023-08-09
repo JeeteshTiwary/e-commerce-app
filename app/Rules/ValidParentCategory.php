@@ -10,7 +10,11 @@ class ValidParentCategory implements Rule
     public function passes($attribute, $value)
     {
         // Check if the parent_id exists in the Category model
-        return Category::where('id', $value)->exists();
+        if ($value == 0) {
+            return true;
+        } else {
+            return Category::where('id', $value)->exists();
+        }
     }
 
     public function message()

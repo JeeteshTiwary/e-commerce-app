@@ -21,7 +21,6 @@ class CategoryObserver
     public function updated(category $category): void
     {
         $category->updated_by = auth()->id();
-        // dd($category->updated_by);
         // $category->save();
     }
 

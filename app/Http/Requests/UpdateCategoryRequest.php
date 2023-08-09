@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use App\Rules\ValidParentCategory;
 
 class UpdateCategoryRequest extends FormRequest
 {
@@ -11,7 +12,7 @@ class UpdateCategoryRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +23,10 @@ class UpdateCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'name' => 'required|string|between:3,191',
+            'thumbnail' => 'image|mimes:jpg,jpeg,png',
+            'parent_id' => ['nullable', 'numeric', new ValidParentCategory],
+            'description' => 'required|string|between:10,191',
         ];
     }
 }

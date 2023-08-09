@@ -47,10 +47,10 @@ class BrandController extends Controller
         }
         $create = Brand::create($validated);
         if ($create) {
-            Alert::success('Success', $validated['name'] . ' brand has been added successfully!')->showConfirmButton();
+            $request->session()->flash('Success', $validated['name'] . ' brand has been added successfully!');
             return redirect()->route('brand.index');
         }
-        Alert::error('Error', 'Something went wrong!')->showConfirmButton();
+        $request->session()->flash("error", 'something went wrong!!');
         return redirect()->route('brand.index');
     }
 
@@ -66,7 +66,7 @@ class BrandController extends Controller
                 return view('brand.editBrand', ['brand' => $brand]);
             }
         } catch (\Throwable $th) {
-            $request->session()->flash("message", 'Requested Brand doesn\'t exit!!');
+            $request->session()->flash("error", 'Requested Brand doesn\'t exit!!');
             return redirect()->route('brand.index');
         }
     }
@@ -83,7 +83,7 @@ class BrandController extends Controller
                 return view('brand.editBrand', ['brand' => $brand]);
             }
         } catch (\Throwable $th) {
-            $request->session()->flash("message", 'Requested Brand doesn\'t exit!!');
+            $request->session()->flash("error", 'Requested Brand doesn\'t exit!!');
             return redirect()->route('brand.index');
         }
     }
@@ -112,14 +112,14 @@ class BrandController extends Controller
 
                 $success = $brand->fill($validated)->save();
                 if ($success) {
-                    Alert::success('Success', $validated['name'] . ' brand has been updated successfully!')->showConfirmButton();
+                    $request->session()->flash("success", $validated->name . ' has been updated successfully!!');
                     return redirect()->route('brand.index');
                 }
-                Alert::error('Error', 'Something went wrong!')->showConfirmButton();
+                $request->session()->flash("error", 'something went wrong!!');
                 return redirect()->route('brand.index');
             }
         } catch (\Throwable $th) {
-            $request->session()->flash("message", 'Requested Brand doesn\'t exit!!');
+            $request->session()->flash("error", 'Requested Brand doesn\'t exit!!');
             return redirect()->route('brand.index');
         }
     }
@@ -140,14 +140,14 @@ class BrandController extends Controller
                 }
                 $delete = $brand->delete();
                 if ($delete) {
-                    Alert::success('Success', $brand->name . ' brand has been deleted successfully!')->showConfirmButton();
+                    $request->session()->flash("success", $brand->name . ' has been deleted successfully!!');
                     return redirect()->route('brand.index');
                 }
-                Alert::error('Error', 'Something went wrong!')->showConfirmButton();
+                $request->session()->flash("error", 'something went wrong!!');
                 return redirect()->route('brand.index');
             }
         } catch (\Throwable $th) {
-            $request->session()->flash("message", 'Requested Brand doesn\'t exit!!');
+            $request->session()->flash("error", 'Requested Brand doesn\'t exit!!');
             return redirect()->route('brand.index');
         }
     }
