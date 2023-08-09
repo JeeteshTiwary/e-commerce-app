@@ -6,7 +6,8 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    public function home(){
-        return view('user.app');
+    public function home()
+    {
+        return view('user.home');
     }
 }

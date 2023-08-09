@@ -11,7 +11,7 @@ class CustomerController extends Controller
      */
     public function index()
     {
-        //
+        return 'page under development.';
     }
 
     /**

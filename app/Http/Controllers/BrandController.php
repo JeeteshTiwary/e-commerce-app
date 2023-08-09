@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use App\Models\Brand;
 use App\Http\Requests\CreateBrandRequest;
 use App\Http\Requests\UpdateBrandRequest;
+use RealRashid\SweetAlert\Facades\Alert;
 
 class BrandController extends Controller
 {
@@ -16,7 +17,7 @@ class BrandController extends Controller
     {
         $brands = Brand::all();
         // dd($brands);
-        
+
         return view('brand.brandList', [
             'brands' => $brands,
         ]);
@@ -46,10 +47,10 @@ class BrandController extends Controller
         }
         $create = Brand::create($validated);
         if ($create) {
-            $request->session()->flash("success", $validated['name'] . 'brand has been added successfully!!');
+            Alert::success('Success', $validated['name'] . ' brand has been added successfully!')->showConfirmButton();
             return redirect()->route('brand.index');
         }
-        $request->session()->flash("message", 'Something went Wrong!!');
+        Alert::error('Error', 'Something went wrong!')->showConfirmButton();
         return redirect()->route('brand.index');
     }
 
@@ -107,19 +108,14 @@ class BrandController extends Controller
                         unlink($path . '/' . $brand->logo);
                     }
                     $validated['logo'] = $fileName;
-                }   
+                }
 
                 $success = $brand->fill($validated)->save();
                 if ($success) {
-                dd($success);
-
-                    $success = $validated->name . ' brand has been updated successfully!!';
-                dd($success);
-
-                    $request->session()->flash("success", $success );                    
+                    Alert::success('Success', $validated['name'] . ' brand has been updated successfully!')->showConfirmButton();
                     return redirect()->route('brand.index');
                 }
-                $request->session()->flash("message", 'Something went Wrong!!');
+                Alert::error('Error', 'Something went wrong!')->showConfirmButton();
                 return redirect()->route('brand.index');
             }
         } catch (\Throwable $th) {
@@ -144,10 +140,10 @@ class BrandController extends Controller
                 }
                 $delete = $brand->delete();
                 if ($delete) {
-                    $request->session()->flash("success", $brand->name . ' brand has been deleted successfully!!');
+                    Alert::success('Success', $brand->name . ' brand has been deleted successfully!')->showConfirmButton();
                     return redirect()->route('brand.index');
                 }
-                $request->session()->flash("message", 'Something went Wrong!!');
+                Alert::error('Error', 'Something went wrong!')->showConfirmButton();
                 return redirect()->route('brand.index');
             }
         } catch (\Throwable $th) {
