@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Brand;
+use App\Models\Category;
 use App\Http\Requests\CreateBrandRequest;
 use App\Http\Requests\UpdateBrandRequest;
 use RealRashid\SweetAlert\Facades\Alert;
@@ -28,7 +29,10 @@ class BrandController extends Controller
      */
     public function create()
     {
-        return view('brand.createBrand');
+        $categories = Category::select('id', 'name')->get();
+        return view('brand.createBrand', [
+            'categories' => $categories,
+        ]);
     }
 
     /**
@@ -36,6 +40,7 @@ class BrandController extends Controller
      */
     public function store(CreateBrandRequest $request)
     {
+        dd($request);
         $validated = $request->validated();
         if ($request->hasFile('logo')) {
             $file = $request->file('logo');

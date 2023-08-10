@@ -14,7 +14,7 @@ class CategoryController extends Controller
      */
     public function index()
     {
-        $categories = Category::select('id', 'name', 'thumbnail', 'description', 'parent_id')->get();
+        $categories = Category::select('id', 'name', 'status', 'thumbnail', 'description', 'parent_id')->get();
         return view('category.categoriesList', compact('categories'));
     }
 

@@ -24,6 +24,7 @@ class createCategoryRequest extends FormRequest
     {
         return [
             'name' => 'required|string|between:3,191',
+            'status' => 'required|numeric',
             'thumbnail' => 'required|image|mimes:jpg,jpeg,png',
             'parent_id' => ['nullable', 'numeric', new ValidParentCategory],
             'description' => 'required|string|between:10,191',

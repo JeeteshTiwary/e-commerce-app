@@ -32,7 +32,8 @@
                 <div class="card-toolbar">
                     <!--begin::Add customer-->
                     <a href="{{ route('category.create') }}" class="btn btn-primary">Add Category</a>
-                    <button style="margin: 5px;" class="btn btn-danger btn-xs delete-all" data-url="">Delete All</button>
+                    <button style="margin: 5px;" class="btn btn-danger btn-xs delete-all"
+                        data-url="{{ route('category.multiple-delete') }}">Delete selected records</button>
                     <!--end::Add customer-->
                 </div>
                 <!--end::Card toolbar-->
@@ -44,7 +45,7 @@
                     {{ 'No records found.' }}
                 @else
                     <!--begin::Table-->
-                    <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_ecommerce_category_table">
+                    <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_ecommerce_table">
                         <!--begin::Table head-->
                         <thead>
                             <!--begin::Table row-->
@@ -52,11 +53,11 @@
                                 <th class="w-10px pe-2">
                                     <div class="form-check form-check-sm form-check-custom form-check-solid me-3">
                                         <input class="form-check-input" type="checkbox" data-kt-check="true"
-                                            data-kt-check-target="#kt_ecommerce_category_table .form-check-input"
-                                            value="1" />
+                                            data-kt-check-target="#kt_ecommerce_table .form-check-input" value="1" />
                                     </div>
                                 </th>
                                 <th class="min-w-250px">Category</th>
+                                <th class="min-w-150px">Status</th>
                                 <th class="min-w-150px">Sub Category of</th>
                                 <th class="text-end min-w-70px">Actions</th>
                             </tr>
@@ -99,6 +100,30 @@
                                         </div>
                                     </td>
                                     <!--end::Category=-->
+                                    <!--begin::Status=-->
+                                    <td>
+                                        <!--begin::Badges-->
+                                        @php
+                                            $status = null;
+                                            switch ($category->status) {
+                                                case '0':
+                                                    $status = 'unpublished';
+                                                    break;
+                                                case '1':
+                                                    $status = 'published';
+                                                    break;
+                                                case '2':
+                                                    $status = 'scheduled';
+                                                    break;
+                                                default:
+                                                    $status = 'unknown';
+                                                    break;
+                                            }
+                                        @endphp
+                                        <div class="badge badge-light-success"> {{ $status }} </div>
+                                        <!--end::Badges-->
+                                    </td>
+                                    <!--end::Status=-->
                                     <!--begin::Type=-->
                                     <td>
                                         @php
@@ -166,53 +191,48 @@
             <!--end::Card body-->
         </div>
         <!--end::Category-->
-        <script type="text/javascript">
+        <script>
             $(document).ready(function() {
 
-                $('#check_all').on('click', function(e) {
+                $('#master').on('click', function(e) {
                     if ($(this).is(':checked', true)) {
-                        $(".checkbox").prop('checked', true);
+                        $(".sub_chk").prop('checked', true);
                     } else {
-                        $(".checkbox").prop('checked', false);
+                        $(".sub_chk").prop('checked', false);
                     }
                 });
 
-                $('.checkbox').on('click', function() {
-                    if ($('.checkbox:checked').length == $('.checkbox').length) {
-                        $('#check_all').prop('checked', true);
-                    } else {
-                        $('#check_all').prop('checked', false);
-                    }
-                });
+                $('.delete_all').on('click', function(e) {
 
-                $('.delete-all').on('click', function(e) {
-
-                    var idsArr = [];
-                    $(".checkbox:checked").each(function() {
-                        idsArr.push($(this).attr('data-id'));
+                    var allVals = [];
+                    $(".sub_chk:checked").each(function() {
+                        allVals.push($(this).attr('data-id'));
                     });
 
-                    if (idsArr.length <= 0) {
-                        alert("Please select atleast one record to delete.");
+                    if (allVals.length <= 0) {
+                        alert("Please select row.");
                     } else {
 
-                        if (confirm("Are you sure, you want to delete the selected categories?")) {
+                        var check = confirm("Are you sure you want to delete this row?");
+                        if (check == true) {
 
-                            var strIds = idsArr.join(",");
+                            var join_selected_values = allVals.join(",");
 
                             $.ajax({
-                                url: "{{ route('category.multiple-delete') }}",
+                                url: $(this).data('url'),
                                 type: 'DELETE',
                                 headers: {
                                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                                 },
-                                data: 'ids=' + strIds,
+                                data: 'ids=' + join_selected_values,
                                 success: function(data) {
-                                    if (data['status'] == true) {
-                                        $(".checkbox:checked").each(function() {
+                                    if (data['success']) {
+                                        $(".sub_chk:checked").each(function() {
                                             $(this).parents("tr").remove();
                                         });
-                                        alert(data['message']);
+                                        alert(data['success']);
+                                    } else if (data['error']) {
+                                        alert(data['error']);
                                     } else {
                                         alert('Whoops Something went wrong!!');
                                     }
@@ -222,6 +242,9 @@
                                 }
                             });
 
+                            $.each(allVals, function(index, value) {
+                                $('table tr').filter("[data-row-id='" + value + "']").remove();
+                            });
                         }
                     }
                 });
@@ -229,10 +252,37 @@
                 $('[data-toggle=confirmation]').confirmation({
                     rootSelector: '[data-toggle=confirmation]',
                     onConfirm: function(event, element) {
-                        element.closest('form').submit();
+                        element.trigger('confirm');
                     }
                 });
 
+                $(document).on('confirm', function(e) {
+                    var eele = e.target;
+                    e.preventDefault();
+
+                    $.ajax({
+                        url: ele.href,
+                        type: 'DELETE',
+                        headers: {
+                            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                        },
+                        success: function(data) {
+                            if (data['success']) {
+                                $("#" + data['tr']).slideUp("slow");
+                                alert(data['success']);
+                            } else if (data['error']) {
+                                alert(data['error']);
+                            } else {
+                                alert('Whoops Something went wrong!!');
+                            }
+                        },
+                        error: function(data) {
+                            alert(data.responseText);
+                        }
+                    });
+
+                    return false;
+                });
             });
         </script>
     </div>

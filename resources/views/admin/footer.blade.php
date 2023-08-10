@@ -52,10 +52,7 @@
 
 <!--end::Modals-->
 <!--begin::Javascript-->
-<script>
-    var hostUrl = "assets/";
 
-</script>
 <!--begin::Global Javascript Bundle(mandatory for all pages)-->
 <script src="{{asset('admin/dist/assets/plugins/global/plugins.bundle.js')}}"></script>
 <script src="{{asset('admin/dist/assets/js/scripts.bundle.js')}}"></script>
@@ -79,11 +76,12 @@
 <!--begin::Custom Javascript(used for this page only)-->
 <script src="{{asset('admin/dist/assets/js/widgets.bundle.js')}}"></script>
 <script src="{{asset('admin/dist/assets/js/custom/widgets.js')}}"></script>
-<script src="{{asset('admin/dist/assets/js/custom/apps/chat/chat.js')}}"></script>
 <script src="{{asset('admin/dist/assets/js/custom/utilities/modals/upgrade-plan.js')}}"></script>
 <script src="{{asset('admin/dist/assets/js/custom/utilities/modals/create-app.js')}}"></script>
 <script src="{{asset('admin/dist/assets/js/custom/utilities/modals/new-target.js')}}"></script>
 <script src="{{asset('admin/dist/assets/js/custom/utilities/modals/users-search.js')}}"></script>
+<script src="{{asset('admin/dist/assets/js/custom/searchData.js')}}"></script>
+<script src="{{asset('admin/dist/assets/js/custom/sortDatas.js')}}"></script>
 <!--end::Custom Javascript-->
 <!--end::Javascript-->
 </body>

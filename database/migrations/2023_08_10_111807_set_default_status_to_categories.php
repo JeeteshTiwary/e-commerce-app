@@ -12,7 +12,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('categories', function (Blueprint $table) {
-            $table->dropColumn('status');
+            $table->tinyInteger('status')->nullable(false)->default('0')->comment('0-unpublished, 1-published, 2-scheduled')->change();            
         });
     }
 
