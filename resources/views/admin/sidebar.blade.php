@@ -8,7 +8,8 @@
                  <a href="javascript:void(0)">
                      <img alt="Logo" src="{{ asset('admin/dist/assets/media/logos/e-commerce-app-logo.jpg') }}"
                          class="h-25px app-sidebar-logo-default" />
-                     E-Commerce App
+                         E-Commerce App
+                     <img alt="Logo" src="{{ asset('admin/dist/assets/media/logos/e-commerce-app-logo.jpg') }}" class="h-20px app-sidebar-logo-minimize">
                  </a>
                  <!--end::Logo image-->
                  <!--begin::Sidebar toggle-->

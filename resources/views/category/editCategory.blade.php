@@ -135,7 +135,7 @@
                             name="parent_id">
                             @foreach ($categories as $data)
                                 <option value="{{ $data->id }}"
-                                    {{ $data->id == $category->parent_id ? 'selected' : null }}>{{ ucwords($data->name) }}
+                                    {{ $data->id == $category->parent_id ? 'selected' : null }}>{{ $data->name }}
                                 </option>
                             @endforeach
                             <option value="0"> none </option>

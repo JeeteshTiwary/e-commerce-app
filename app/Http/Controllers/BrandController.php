@@ -16,9 +16,7 @@ class BrandController extends Controller
      */
     public function index()
     {
-        $brands = Brand::all();
-        // dd($brands);
-
+        $brands = Brand::select('id', 'name', 'logo', 'status', 'description', 'url')->with('categories')->get();
         return view('brand.brandList', [
             'brands' => $brands,
         ]);
@@ -40,7 +38,6 @@ class BrandController extends Controller
      */
     public function store(CreateBrandRequest $request)
     {
-        dd($request);
         $validated = $request->validated();
         if ($request->hasFile('logo')) {
             $file = $request->file('logo');
@@ -50,8 +47,13 @@ class BrandController extends Controller
             $uplaod = $file->move($path, $fileName);
             $validated['logo'] = $fileName;
         }
-        $create = Brand::create($validated);
-        if ($create) {
+        $categories = $validated['categories'];
+
+        $brand = Brand::create($validated);
+
+        $brand->categories()->attach($categories);
+
+        if ($brand) {
             $request->session()->flash('Success', $validated['name'] . ' brand has been added successfully!');
             return redirect()->route('brand.index');
         }
@@ -84,8 +86,10 @@ class BrandController extends Controller
         try {
             $id = decrypt($id);
             $brand = Brand::findOrfail($id);
+            
             if ($brand) {
-                return view('brand.editBrand', ['brand' => $brand]);
+                $categories = Category::all();
+                return view('brand.editBrand', ['brand' => $brand, 'categories' => $categories]);
             }
         } catch (\Throwable $th) {
             $request->session()->flash("error", 'Requested Brand doesn\'t exit!!');
@@ -114,13 +118,16 @@ class BrandController extends Controller
                     }
                     $validated['logo'] = $fileName;
                 }
+                $categories = $validated['categories'];
 
-                $success = $brand->fill($validated)->save();
-                if ($success) {
-                    $request->session()->flash("success", $validated->name . ' has been updated successfully!!');
+                $brand->update($validated);
+
+                $brand->categories()->sync($categories);
+                if ($brand) {
+                    $request->session()->flash("success", $validated['name'] . ' has been updated successfully!!');
                     return redirect()->route('brand.index');
                 }
-                $request->session()->flash("error", 'something went wrong!!');
+                $request->session()->flash("error", 'some error occured during update!!');
                 return redirect()->route('brand.index');
             }
         } catch (\Throwable $th) {
@@ -143,12 +150,13 @@ class BrandController extends Controller
                 if (file_exists(file_exists($path . '/' . $brand->logo))) {
                     unlink($path . '/' . $brand->logo);
                 }
+                $brand->categories()->detach();
                 $delete = $brand->delete();
                 if ($delete) {
                     $request->session()->flash("success", $brand->name . ' has been deleted successfully!!');
                     return redirect()->route('brand.index');
                 }
-                $request->session()->flash("error", 'something went wrong!!');
+                $request->session()->flash("error", 'some error occured during delete!!');
                 return redirect()->route('brand.index');
             }
         } catch (\Throwable $th) {

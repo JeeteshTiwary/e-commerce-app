@@ -37,7 +37,8 @@
                                 <i class="bi bi-pencil-fill fs-7"></i>
                                 <!--end::Icon-->
                                 <!--begin::Inputs-->
-                                <input type="file" name="logo" value="{{ $brand->logo }}" accept=".png, .jpg, .jpeg" />
+                                <input type="file" name="logo" value="{{ $brand->logo }}"
+                                    accept=".png, .jpg, .jpeg" />
                                 <input type="hidden" name="logo_remove" />
                                 <!--end::Inputs-->
                             </label>
@@ -89,9 +90,9 @@
                         <select class="form-select mb-2" data-control="select2" data-hide-search="true"
                             data-placeholder="Select an option" id="kt_ecommerce_add_Brand_status_select" name="status">
                             <option></option>
-                            <option value="1" {{$brand->status =='1'?'selected':null}}>Published</option>
-                            <option value="2" {{$brand->status =='2'?'selected':null}}>Scheduled</option>
-                            <option value="0" {{$brand->status =='0'?'selected':null}}>Unpublished</option>
+                            <option value="1" {{ $brand->status == '1' ? 'selected' : null }}>Published</option>
+                            <option value="2" {{ $brand->status == '2' ? 'selected' : null }}>Scheduled</option>
+                            <option value="0" {{ $brand->status == '0' ? 'selected' : null }}>Unpublished</option>
                         </select>
                         <!--end::Select2-->
                         <!--begin::Description-->
@@ -110,6 +111,54 @@
                     <!--end::Card body-->
                 </div>
                 <!--end::Status-->
+                <!--begin::Category & tags-->
+                <div class="card card-flush py-4">
+                    <!--begin::Card header-->
+                    <div class="card-header">
+                        <!--begin::Card title-->
+                        <div class="card-title">
+                            <h2>Associated categories </h2>
+                        </div>
+                        <!--end::Card title-->
+                    </div>
+                    <!--end::Card header-->
+                    <!--begin::Card body-->
+                    <div class="card-body pt-0">
+                        <!--begin::Input group-->
+                        <!--begin::Label-->
+                        <label class="form-label">Categories</label>
+                        <!--end::Label-->
+                        <!--begin::Select2-->
+                        <select class="form-select mb-2" data-control="select2" data-placeholder="Select an option"
+                            data-allow-clear="true" multiple="multiple" name="categories[]">
+                            <option></option>
+                            @foreach($categories as $category)
+                            <option value="{{$category->id}}" @if($brand->category_id == $category->id) selected @endif>{{$category->name}}</option>
+                            @endforeach
+                        </select>
+                        <!--end::Select2-->
+                        <!--begin::Description-->
+                        <div class="text-muted fs-7 mb-7">Add categories to a brand.</div>
+                        <!--end::Description-->
+                        <!--end::Input group-->
+                        <!--begin::Button-->
+                        <a href="{{ route('category.create') }}" class="btn btn-light-primary btn-sm mb-10">
+                            <!--begin::Svg Icon | path: icons/duotune/arrows/arr087.svg-->
+                            <span class="svg-icon svg-icon-2">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg">
+                                    <rect opacity="0.5" x="11" y="18" width="12" height="2"
+                                        rx="1" transform="rotate(-90 11 18)" fill="currentColor" />
+                                    <rect x="6" y="11" width="12" height="2" rx="1"
+                                        fill="currentColor" />
+                                </svg>
+                            </span>
+                            <!--end::Svg Icon-->Create new category</a>
+                        <!--end::Button-->
+                    </div>
+                    <!--end::Card body-->
+                </div>
+                <!--end::Category & tags-->
             </div>
             <!--end::Aside column-->
             <!--begin::Main column-->
