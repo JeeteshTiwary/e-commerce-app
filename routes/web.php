@@ -40,7 +40,7 @@ Route::middleware('auth')->group(function () {
     Route::resource('category', CategoryController::class);
     Route::resource('customer', CustomerController::class);
     Route::resource('order', OrderController::class);
-    
+
     Route::delete('/multiple-delete', [CategoryController::class, 'deleteMultiple'])->name('category.multiple-delete');
 });
 
@@ -52,10 +52,10 @@ Route::controller(AdminController::class)->prefix('admin')->name('admin.')->grou
     Route::get('/home', 'home')->name('home');
     Route::get('/dashboard', 'dashboard')->name('dashboard');
     Route::get('/profile', 'editProfile')->name('profile');
-    
+
 })->middleware(['auth', 'verified']);
 
 Route::controller(UserController::class)->name('user.')->group(function () {
     Route::get('/home', 'home')->name('home');
-    
+
 });

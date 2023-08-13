@@ -24,7 +24,9 @@ class LoginController extends Controller
             return redirect(RouteServiceProvider::HOME);
         }
 
-        if (Auth::attempt($credentials)) {
+        $remember = $request->has('remember');
+
+        if (Auth::attempt($credentials, $remember)) {
             $request->session()->regenerate();
 
             return redirect()->intended('dashboard');

@@ -86,7 +86,7 @@ class BrandController extends Controller
         try {
             $id = decrypt($id);
             $brand = Brand::findOrfail($id);
-            
+
             if ($brand) {
                 $categories = Category::all();
                 return view('brand.editBrand', ['brand' => $brand, 'categories' => $categories]);

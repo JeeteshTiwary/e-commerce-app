@@ -12,9 +12,16 @@ class CategoryController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $categories = Category::select('id', 'name', 'status', 'thumbnail', 'description', 'parent_id')->get();
+        if ($request->ajax()) {
+            $page = $request->input('page', 1);
+            $categories = Category::orderBy('id')->paginate(10, ['*'], 'page', $page);
+            return view('category.categoriesList', compact('categories'));
+        }
+
+        // For initial load
+        $categories = Category::orderBy('id')->paginate(10);
         return view('category.categoriesList', compact('categories'));
     }
 

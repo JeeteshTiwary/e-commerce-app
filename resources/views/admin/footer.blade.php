@@ -82,6 +82,12 @@
 <script src="{{asset('admin/dist/assets/js/custom/utilities/modals/users-search.js')}}"></script>
 <script src="{{asset('admin/dist/assets/js/custom/searchData.js')}}"></script>
 <script src="{{asset('admin/dist/assets/js/custom/sortDatas.js')}}"></script>
+<script>
+    var endpoint = "{{ route('category.index') }}";
+
+</script>
+<script src="{{ asset('admin/dist/assets/js/custom/lazyLoading.js') }}"></script>
+
 <!--end::Custom Javascript-->
 <!--end::Javascript-->
 </body>

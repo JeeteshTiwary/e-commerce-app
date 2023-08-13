@@ -1,0 +1,53 @@
+// code for lazy loading for categories
+
+var endpoint = "{{ route('category.index') }}";
+
+var page = 1;
+var isLoading = false;
+
+$(window).scroll(function() {
+    if (!isLoading && $(window).scrollTop() + $(window).height() >= $(document).height() - 100) {
+        page++;
+        infinteLoadMore(page);
+    }
+});
+
+function infinteLoadMore(page) {
+    isLoading = true;
+    $('.auto-load').text("Loading more...").show();
+
+    var url = endpoint + "?page=" + page; // Use the defined endpoint variable
+
+    console.log('URL:', url);
+
+    $.ajax({
+        url: url,
+        datatype: "html",
+        type: "get",
+        headers: {
+            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        }
+    })
+    
+    .done(function(response) {
+        console.log('AJAX Response:', response)
+
+        isLoading = false;
+        $('.auto-load').hide();
+
+        if (response.length == 0) {
+            $('.auto-load').text("No more data to display").show();
+            return;
+        }
+
+        $("#kt_ecommerce_table tbody").append(response);
+    })
+    .fail(function(jqXHR, ajaxOptions, thrownError) {
+        console.log('Server error occurred');
+        console.log('AJAX Error:', thrownError);
+        isLoading = false;
+        $('.auto-load').text("Error loading more data").show();
+    });
+}
+
+
