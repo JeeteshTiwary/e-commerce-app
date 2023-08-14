@@ -173,6 +173,7 @@
                 <!--end::Table body-->
             </table>
             <!--end::Table-->
+            {{$categories->links()}}
             @endif
             <!-- Loading indicator -->
             <div class="auto-load" style="display: none;">Loading more...</div>

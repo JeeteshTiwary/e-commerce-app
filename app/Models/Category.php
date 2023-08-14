@@ -28,4 +28,8 @@ class Category extends Model
     public function brand() {
         return $this->belongsToMany(Brand::class, 'brand_categories');
     }
+
+    public function product() {
+        return $this->belongsToMany(Product::class, 'product_brand_categories');
+    }
 }

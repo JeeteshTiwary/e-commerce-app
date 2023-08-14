@@ -139,7 +139,7 @@
                             data-allow-clear="true" multiple="multiple" name="categories[]">
                             <option></option>
                             @foreach ($categories as $category)
-                                <option value="{{ $category->id }}">{{ ucwords($category->name) }}</option>
+                                <option value="{{ $category->id }}">{{ $category->name }}</option>
                             @endforeach
                         </select>
                         <!--end::Select2-->
@@ -148,8 +148,7 @@
                         <!--end::Description-->
                         <!--end::Input group-->
                         <!--begin::Button-->
-                        <a href="{{ route('category.create') }}"
-                            class="btn btn-light-primary btn-sm mb-10">
+                        <a href="{{ route('category.create') }}" class="btn btn-light-primary btn-sm mb-10">
                             <!--begin::Svg Icon | path: icons/duotune/arrows/arr087.svg-->
                             <span class="svg-icon svg-icon-2">
                                 <svg width="24" height="24" viewBox="0 0 24 24" fill="none"
@@ -215,19 +214,16 @@
                                     <!--begin::Input group-->
                                     <div>
                                         <!--begin::Label-->
-                                        <label class="required form-label">Description</label>
+                                        <label class="form-label">Description</label>
                                         <!--end::Label-->
                                         <!--begin::Editor-->
-                                        <div id="kt_ecommerce_add_category_description" class="min-h-100px">
-                                            <textarea id="description" name="description" rows="4" cols="110">
-                                            </textarea>
-                                        </div>
+                                        <div id="kt_ecommerce_add_product_description"
+                                            name="kt_ecommerce_add_product_description" class="min-h-200px mb-2"></div>
                                         <!--end::Editor-->
                                         <!--begin::Description-->
-                                        <div class="text-muted fs-7">Set a description to the category for better
+                                        <div class="text-muted fs-7">Set a description to the product for better
                                             visibility.</div>
                                         <!--end::Description-->
-                                        <span class="text-danger"> {{ $errors->first('description') }} </span>
                                     </div>
                                     <!--end::Input group-->
                                     <!--begin::Input group-->

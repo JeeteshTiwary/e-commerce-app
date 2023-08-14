@@ -82,6 +82,8 @@
 <script src="{{asset('admin/dist/assets/js/custom/utilities/modals/users-search.js')}}"></script>
 <script src="{{asset('admin/dist/assets/js/custom/searchData.js')}}"></script>
 <script src="{{asset('admin/dist/assets/js/custom/sortDatas.js')}}"></script>
+<script src="{{asset('admin/dist/assets/js/custom/apps/ecommerce/catalog/save-product.js')}}"></script>
+<script src="{{asset('admin/dist/assets/plugins/custom/formrepeater/formrepeater.bundle.js')}}"></script>
 <script>
     var endpoint = "{{ route('category.index') }}";
 
