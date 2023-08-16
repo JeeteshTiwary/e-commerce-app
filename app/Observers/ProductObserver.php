@@ -21,7 +21,7 @@ class ProductObserver
     public function updated(product $product): void
     {
         $product->updated_by = auth()->id();
-        $product->save();
+        // $product->save();
     }
 
     /**

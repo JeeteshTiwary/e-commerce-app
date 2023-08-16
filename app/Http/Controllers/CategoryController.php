@@ -170,13 +170,15 @@ class CategoryController extends Controller
     public function deleteMultiple(Request $request)
     {
         try {
-            $ids = $request->ids;
-            Category::whereIn('id', explode(",", $ids))->delete();
-            $request->session()->flash("success", ' selected categories has been deleted successfully!!');
-            return redirect()->route('category.index');
+            $ids = $request->category_ids;
+            if (!$ids) {
+                return redirect()->back()->with("error", 'No category has been seleted to delete!!');
+            }
+            Category::whereIn('id', $ids)->delete();
+            return redirect()->back()->with("success", ' selected categories has been deleted successfully!!');
         } catch (\Throwable $th) {
-            $request->session()->flash("error", 'Requested category doesn\'t exit!!');
-            return redirect()->route('category.index');
+           return redirect()->back()->with("error", 'Requested category doesn\'t exit!!');
         }
     }
+    
 }

@@ -3,6 +3,9 @@
 @section('content')
     <!--begin::Content container-->
     <div id="kt_app_content_container" class="app-container container-xxl">
+        <form action="{{route('brand.multiple-delete')}}" method="POST">
+            @csrf
+            @method('delete')
         <!--begin::Brand-->
         <div class="card card-flush">
             <!--begin::Card header-->
@@ -31,10 +34,13 @@
                 <!--end::Card title-->
                 <!--begin::Card toolbar-->
                 <div class="card-toolbar">
-                    <!--begin::Add customer-->
-                    <a href=" {{ route('brand.create') }}" class="btn btn-primary">Add
+                    <!--begin::Add brand-->
+                    <a href=" {{ route('brand.create') }}" class="btn btn-primary mx-3">Add
                         Brand</a>
-                    <!--end::Add customer-->
+                    <!--end::Add brand-->
+                    <!--begin::Delete selected brand-->
+                    <button class="btn btn-danger" type="submit"> Delete Seleted Brands </button>
+                    <!--end::Delete selected brand-->
                 </div>
                 <!--end::Card toolbar-->
             </div>
@@ -54,7 +60,7 @@
                                     <div class="form-check form-check-sm form-check-custom form-check-solid me-3">
                                         <input class="form-check-input" type="checkbox" data-kt-check="true"
                                             data-kt-check-target="#kt_ecommerce_table .form-check-input"
-                                            value="1" />
+                                            name="brands[]" />
                                     </div>
                                 </th>
                                 <th class="min-w-250px">Brand</th>
@@ -73,7 +79,7 @@
                                     <!--begin::Checkbox-->
                                     <td>
                                         <div class="form-check form-check-sm form-check-custom form-check-solid">
-                                            <input class="form-check-input" type="checkbox" value="1" />
+                                            <input class="form-check-input" type="checkbox" value="{{$brand->id}}" name="brand_ids[]" />
                                         </div>
                                     </td>
                                     <!--end::Checkbox-->
@@ -183,6 +189,7 @@
             <!--end::Card body-->
         </div>
         <!--end::Brand-->
+        </form>
     </div>
     <!--end::Content container-->
 @endsection

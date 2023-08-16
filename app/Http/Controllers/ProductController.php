@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Tag;
+use App\Models\Variation;
 use Illuminate\Http\Request;
 use App\Http\Requests\CreateProductRequest;
 
@@ -29,7 +31,9 @@ class ProductController extends Controller
     {
         $categories = Category::select('id', 'name')->get();
         $brands = Brand::select('id', 'name')->get();
-        return view('admin.products.createProduct', compact('categories', 'brands'));
+        $tags = Tag::select('id', 'name')->get();
+        $variations = Variation::select('id', 'name')->get();
+        return view('admin.products.createProduct', compact('categories', 'brands','tags','variations'));
     }
 
     /**
@@ -38,6 +42,7 @@ class ProductController extends Controller
     public function store(CreateProductRequest $request)
     {
         $validated = $request->validated();
+        dd($validated);
         if ($request->hasFile('thumbnail')) {
             $file = $request->file('thumbnail');
             $extension = $file->getClientOriginalExtension();
@@ -67,7 +72,9 @@ class ProductController extends Controller
     {
         $categories = Category::select('id', 'name')->get();
         $brands = Brand::select('id', 'name')->get();
-        return view('admin.products.create', compact('categories', 'brands'));
+        $tags = Tag::select('id', 'name')->get();
+        $variations = Variation::select('id', 'name')->get();
+        return view('admin.products.create', compact('categories', 'brands','tags','variations'));
     }
 
     /**
@@ -75,7 +82,11 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        return view('admin.products.editProduct');
+        $categories = Category::select('id', 'name')->get();
+        $brands = Brand::select('id', 'name')->get();
+        $tags = Tag::select('id', 'name')->get();
+        $variations = Variation::select('id', 'name')->get();
+        return view('admin.products.editProduct', compact('categories', 'brands','tags','variations'));
     }
 
     /**
@@ -94,3 +105,4 @@ class ProductController extends Controller
         //
     }
 }
+

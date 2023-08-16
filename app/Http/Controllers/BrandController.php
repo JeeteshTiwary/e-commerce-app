@@ -164,4 +164,18 @@ class BrandController extends Controller
             return redirect()->route('brand.index');
         }
     }
+
+    public function deleteMultiple(Request $request)
+    {
+        try {
+            $ids = $request->brand_ids;
+            if (!$ids) {
+                return redirect()->back()->with("error", 'No brand has been seleted to delete!!');
+            }
+            Brand::whereIn('id', $ids)->delete();
+            return redirect()->back()->with("success", ' selected categories has been deleted successfully!!');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with("error", 'Requested brand doesn\'t exit!!');
+        }
+    }
 }

@@ -161,6 +161,7 @@
                             </span>
                             <!--end::Svg Icon-->Create new category</a>
                         <!--end::Button-->
+                        <div class="text-danger"> {{ $errors->first('categories') }} </div>
                     </div>
                     <!--end::Card body-->
                 </div>
@@ -217,13 +218,17 @@
                                         <label class="form-label">Description</label>
                                         <!--end::Label-->
                                         <!--begin::Editor-->
-                                        <div id="kt_ecommerce_add_product_description"
-                                            name="kt_ecommerce_add_product_description" class="min-h-200px mb-2"></div>
+                                        <div id="kt_ecommerce_add_category_description"
+                                            name="kt_ecommerce_add_category_description" class="min-h-100px mb-2">
+                                            <textarea id="description" name="description" rows="4" cols="110">
+                                </textarea>
+                                        </div>
                                         <!--end::Editor-->
                                         <!--begin::Description-->
-                                        <div class="text-muted fs-7">Set a description to the product for better
+                                        <div class="text-muted fs-7">Set a description to the category for better
                                             visibility.</div>
                                         <!--end::Description-->
+                                        <span class="text-danger"> {{ $errors->first('description') }} </span>
                                     </div>
                                     <!--end::Input group-->
                                     <!--begin::Input group-->

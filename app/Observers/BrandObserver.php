@@ -17,8 +17,11 @@ class BrandObserver
      */
     public function created(Brand $brand): void
     {
-        $brand->created_by = auth()->id();
-        $brand->save();
+        $user = auth()->id();
+        if ($user) {
+            $brand->created_by = $user;
+            $brand->save();
+        }
     }
 
     /**
@@ -26,8 +29,11 @@ class BrandObserver
      */
     public function updated(Brand $brand): void
     {
-        $brand->updated_by = auth()->id();
-        // $brand->save();        
+        $user = auth()->id();
+        if ($user) {
+            $brand->updated_by = $user;
+            // $brand->save();
+        }     
     }
 
     /**

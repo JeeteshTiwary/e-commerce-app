@@ -41,7 +41,8 @@ Route::middleware('auth')->group(function () {
     Route::resource('customer', CustomerController::class);
     Route::resource('order', OrderController::class);
 
-    Route::delete('/multiple-delete', [CategoryController::class, 'deleteMultiple'])->name('category.multiple-delete');
+    Route::delete('/delete-selected-categories', [CategoryController::class, 'deleteMultiple'])->name('category.multiple-delete');
+    Route::delete('/delete-selected-brand', [BrandController::class, 'deleteMultiple'])->name('brand.multiple-delete');
 });
 
 require __DIR__ . '/auth.php';

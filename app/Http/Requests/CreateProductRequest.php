@@ -22,16 +22,20 @@ class CreateProductRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'product_name' => 'required|string|max:191',
-            'description' => 'required|string|max:191',
+            'name' => 'required|string|between:3,191',
+            'description' => 'required|string|between:10,191',
+            'thumbnail' => 'required|image|mimes:jpg,jpeg,png',
+            'status' => 'required|numeric',
+            'brand' => 'required|numeric',
+            'category' => 'required|numeric',
+            'tags' => 'required|array',
+            'images' => 'required|array',
             'base_price' => 'required|numeric|min:0.01',
-            'sell_price' => 'required|numeric|min:0.01',
-            'thumbnail' => 'required|image|mimes:png,jpg,jpeg',
+            'sale_price' => 'required|numeric|min:0.01',
             'shelf' => 'required|integer|min:0',
             'warehouse' => 'required|integer|min:0',
-            'product_option' => 'required|string|max:191',
-            'product_option_value' => 'required|string|max:191',
-            'tags' => 'array',
+            'variation_name' => 'required',
+            'variation_value' => 'required',
         ];
     }
 
@@ -40,8 +44,8 @@ class CreateProductRequest extends FormRequest
         return [
             'shelf' => 'Please provide how many products present in shelf',
             'warehouse' => 'required|integer|min:0',
-            'product_option' => 'Product variation is required.',
-            'product_option_value' => 'Please provide value for the variation.',
+            'variation_name' => 'Product variation is required.',
+            'variation_value' => 'Please provide value for the variation.',
         ];
     }
 }

@@ -5,7 +5,10 @@
     <div id="kt_app_content_container" class="app-container container-xxl">
         <!--begin::Form-->
         <form id="kt_ecommerce_add_product_form" class="form d-flex flex-column flex-lg-row"
-            data-kt-redirect="../../demo1/dist/apps/ecommerce/catalog/products.html">
+            data-kt-redirect="../../demo1/dist/apps/ecommerce/catalog/products.html" method="POST"
+            action="{{ route('product.store') }}">
+            @csrf
+            @method('POST')
             <!--begin::Aside column-->
             <div class="d-flex flex-column gap-7 gap-lg-10 w-100 w-lg-300px mb-7 me-lg-10">
                 <!--begin::Thumbnail settings-->
@@ -66,6 +69,7 @@
                         <div class="text-muted fs-7">Set the product thumbnail image. Only *.png, *.jpg and *.jpeg image
                             files are accepted</div>
                         <!--end::Description-->
+                        <span class="text-danger"> {{ $errors->first('thumbnail') }} </span>
                     </div>
                     <!--end::Card body-->
                 </div>
@@ -90,17 +94,17 @@
                     <div class="card-body pt-0">
                         <!--begin::Select2-->
                         <select class="form-select mb-2" data-control="select2" data-hide-search="true"
-                            data-placeholder="Select an option" id="kt_ecommerce_add_product_status_select">
+                            data-placeholder="Select an option" id="kt_ecommerce_add_product_status_select" name="status">
                             <option></option>
-                            <option value="published" selected="selected">Published</option>
-                            <option value="draft">Draft</option>
-                            <option value="scheduled">Scheduled</option>
-                            <option value="inactive">Inactive</option>
+                            <option value="1" selected="selected">Published</option>
+                            <option value="2">Scheduled</option>
+                            <option value="0">Unpublished</option>
                         </select>
                         <!--end::Select2-->
                         <!--begin::Description-->
                         <div class="text-muted fs-7">Set the product status.</div>
                         <!--end::Description-->
+                        <span class="text-danger"> {{ $errors->first('status') }} </span>
                         <!--begin::Datepicker-->
                         <div class="d-none mt-10">
                             <label for="kt_ecommerce_add_product_status_datepicker" class="form-label">Select publishing
@@ -132,7 +136,7 @@
                         <!--end::Label-->
                         <!--begin::Select2-->
                         <select class="form-select mb-2" data-control="select2" data-placeholder="Select an option"
-                            data-allow-clear="true">
+                            data-allow-clear="true" name="brand">
                             <option></option>
                             @foreach ($brands as $brand)
                                 <option value="{{ $brand->id }}">{{ $brand->name }}</option>
@@ -157,6 +161,7 @@
                             </span>
                             <!--end::Svg Icon-->Create new brand</a>
                         <!--end::Button-->
+                        <div class="text-danger"> {{ $errors->first('brand') }} </div>
                     </div>
                     <!--end::Card body-->
                     <!--begin::Card body-->
@@ -167,7 +172,7 @@
                         <!--end::Label-->
                         <!--begin::Select2-->
                         <select class="form-select mb-2" data-control="select2" data-placeholder="Select an option"
-                            data-allow-clear="true">
+                            data-allow-clear="true" name="category">
                             <option></option>
                             @foreach ($categories as $category)
                                 <option value="{{ $category->id }}">{{ $category->name }}</option>
@@ -192,17 +197,28 @@
                             </span>
                             <!--end::Svg Icon-->Create new category</a>
                         <!--end::Button-->
+                        <div class="text-danger"> {{ $errors->first('category') }} </div>
                         <!--begin::Input group-->
                         <!--begin::Label-->
                         <label class="form-label d-block">Tags</label>
                         <!--end::Label-->
-                        <!--begin::Input-->
-                        <input id="kt_ecommerce_add_product_tags" name="kt_ecommerce_add_product_tags"
-                            class="form-control mb-2" value="" />
-                        <!--end::Input-->
+                        {{-- <!--begin::Input-->
+                        <input id="kt_ecommerce_add_product_tags" name="tags[]" class="form-control mb-2"
+                            value="" />
+                        <!--end::Input--> --}}
+                        <!--begin::Select2-->
+                        <select class="form-select mb-2" data-control="select2" data-placeholder="Select an option"
+                            data-allow-clear="true" name="tags[]" multiple="multiple">
+                            <option></option>
+                            @foreach ($tags as $tag)
+                                <option value="{{ $tag->id }}">{{ $tag->name }}</option>
+                            @endforeach
+                        </select>
+                        <!--end::Select2-->
                         <!--begin::Description-->
                         <div class="text-muted fs-7">Add tags to a product.</div>
                         <!--end::Description-->
+                        <span class="text-danger"> {{ $errors->first('tags') }} </span>
                         <!--end::Input group-->
                     </div>
                     <!--end::Card body-->
@@ -250,13 +266,14 @@
                                         <label class="required form-label">Product Name</label>
                                         <!--end::Label-->
                                         <!--begin::Input-->
-                                        <input type="text" name="product_name" class="form-control mb-2"
+                                        <input type="text" name="name" class="form-control mb-2"
                                             placeholder="Product name" value="" />
                                         <!--end::Input-->
                                         <!--begin::Description-->
                                         <div class="text-muted fs-7">A product name is required and recommended to be
                                             unique.</div>
                                         <!--end::Description-->
+                                        <span class="text-danger"> {{ $errors->first('name') }} </span>
                                     </div>
                                     <!--end::Input group-->
                                     <!--begin::Input group-->
@@ -265,13 +282,15 @@
                                         <label class="form-label">Description</label>
                                         <!--end::Label-->
                                         <!--begin::Editor-->
-                                        <div id="kt_ecommerce_add_product_description"
-                                            name="kt_ecommerce_add_product_description" class="min-h-200px mb-2"></div>
+                                        <div id="kt_ecommerce_add_product_description" class="min-h-200px mb-2"></div>
                                         <!--end::Editor-->
                                         <!--begin::Description-->
-                                        <div class="text-muted fs-7">Set a description to the product for better
+                                        <div class="text-muted fs-7" name="description">Set a description to the product
+                                            for better
                                             visibility.</div>
                                         <!--end::Description-->
+                                        <span class="text-danger"> {{ $errors->first('description') }} </span>
+
                                     </div>
                                     <!--end::Input group-->
                                 </div>
@@ -292,7 +311,7 @@
                                     <!--begin::Input group-->
                                     <div class="fv-row mb-2">
                                         <!--begin::Dropzone-->
-                                        <div class="dropzone" id="kt_ecommerce_add_product_media">
+                                        <div class="dropzone" id="kt_ecommerce_add_product_media" name="images[]">
                                             <!--begin::Message-->
                                             <div class="dz-message needsclick">
                                                 <!--begin::Icon-->
@@ -309,6 +328,7 @@
                                             </div>
                                         </div>
                                         <!--end::Dropzone-->
+                                        <span class="text-danger"> {{ $errors->first('images[]') }} </span>
                                     </div>
                                     <!--end::Input group-->
                                     <!--begin::Description-->
@@ -338,6 +358,7 @@
                                         <input type="text" name="base_price" class="form-control mb-2"
                                             placeholder="Product price" value="" />
                                         <!--end::Input-->
+                                        <span class="text-danger"> {{ $errors->first('base_price') }} </span>
                                         <!--begin::Description-->
                                         <div class="text-muted fs-7">Set the product base price.</div>
                                         <!--end::Description-->
@@ -352,6 +373,7 @@
                                         <input type="text" name="sale_price" class="form-control mb-2"
                                             placeholder="Product price" value="" />
                                         <!--end::Input-->
+                                        <span class="text-danger"> {{ $errors->first('sale_price') }} </span>
                                         <!--begin::Description-->
                                         <div class="text-muted fs-7">Set the product sale price.</div>
                                         <!--end::Description-->
@@ -401,8 +423,10 @@
                                         <div class="d-flex gap-3">
                                             <input type="number" name="shelf" class="form-control mb-2"
                                                 placeholder="On shelf" value="" />
+                                            <span class="text-danger"> {{ $errors->first('shelf') }} </span>
                                             <input type="number" name="warehouse" class="form-control mb-2"
                                                 placeholder="In warehouse" />
+                                            <span class="text-danger"> {{ $errors->first('warehouse') }} </span>
                                         </div>
                                         <!--end::Input-->
                                         <!--begin::Description-->
@@ -440,21 +464,25 @@
                                                         class="form-group d-flex flex-wrap align-items-center gap-5">
                                                         <!--begin::Select2-->
                                                         <div class="w-100 w-md-200px">
-                                                            <select class="form-select" name="variation_name"
+                                                            <select class="form-select" name="variation_name[]"
                                                                 data-placeholder="Select a variation"
                                                                 data-kt-ecommerce-catalog-add-product="product_option">
                                                                 <option></option>
-                                                                <option value="color">Color</option>
-                                                                <option value="size">Size</option>
-                                                                <option value="material">Material</option>
-                                                                <option value="style">Style</option>
+                                                                @foreach ($variations as $variation)
+                                                                    <option value="{{ $variation->id }}">
+                                                                        {{ $variation->name }}</option>
+                                                                @endforeach
                                                             </select>
                                                         </div>
                                                         <!--end::Select2-->
+                                                        <span class="text-danger"> {{ $errors->first('variation_name') }}
+                                                        </span>
                                                         <!--begin::Input-->
                                                         <input type="text" class="form-control mw-100 w-200px"
-                                                            name="variation_value" placeholder="Variation" />
+                                                            name="variation_value[]" placeholder="Variation" />
                                                         <!--end::Input-->
+                                                        <span class="text-danger"> {{ $errors->first('variation_value') }}
+                                                        </span>
                                                         <button type="button" data-repeater-delete=""
                                                             class="btn btn-sm btn-icon btn-light-danger">
                                                             <!--begin::Svg Icon | path: icons/duotune/arrows/arr088.svg-->
@@ -510,7 +538,7 @@
                 <!--end::Tab content-->
                 <div class="d-flex justify-content-end">
                     <!--begin::Button-->
-                    <a href="../../demo1/dist/apps/ecommerce/catalog/products.html" id="kt_ecommerce_add_product_cancel"
+                    <a href="{{ route('product.index') }}" id="kt_ecommerce_add_product_cancel"
                         class="btn btn-light me-5">Cancel</a>
                     <!--end::Button-->
                     <!--begin::Button-->
