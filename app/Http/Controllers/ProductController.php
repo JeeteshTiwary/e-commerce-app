@@ -33,7 +33,7 @@ class ProductController extends Controller
         $brands = Brand::select('id', 'name')->get();
         $tags = Tag::select('id', 'name')->get();
         $variations = Variation::select('id', 'name')->get();
-        return view('admin.products.createProduct', compact('categories', 'brands','tags','variations'));
+        return view('admin.products.createProduct', compact('categories', 'brands', 'tags', 'variations'));
     }
 
     /**
@@ -41,6 +41,7 @@ class ProductController extends Controller
      */
     public function store(CreateProductRequest $request)
     {
+        dd($request);
         $validated = $request->validated();
         dd($validated);
         if ($request->hasFile('thumbnail')) {
@@ -74,7 +75,7 @@ class ProductController extends Controller
         $brands = Brand::select('id', 'name')->get();
         $tags = Tag::select('id', 'name')->get();
         $variations = Variation::select('id', 'name')->get();
-        return view('admin.products.create', compact('categories', 'brands','tags','variations'));
+        return view('admin.products.create', compact('categories', 'brands', 'tags', 'variations'));
     }
 
     /**
@@ -86,7 +87,7 @@ class ProductController extends Controller
         $brands = Brand::select('id', 'name')->get();
         $tags = Tag::select('id', 'name')->get();
         $variations = Variation::select('id', 'name')->get();
-        return view('admin.products.editProduct', compact('categories', 'brands','tags','variations'));
+        return view('admin.products.editProduct', compact('categories', 'brands', 'tags', 'variations'));
     }
 
     /**
@@ -105,4 +106,3 @@ class ProductController extends Controller
         //
     }
 }
-

@@ -6,7 +6,7 @@
         <!--begin::Form-->
         <form id="kt_ecommerce_add_product_form" class="form d-flex flex-column flex-lg-row"
             data-kt-redirect="../../demo1/dist/apps/ecommerce/catalog/products.html" method="POST"
-            action="{{ route('product.store') }}">
+            action="{{ route('product.store') }}" enctype="multipart/form-data">
             @csrf
             @method('POST')
             <!--begin::Aside column-->
@@ -421,12 +421,14 @@
                                         <!--end::Label-->
                                         <!--begin::Input-->
                                         <div class="d-flex gap-3">
-                                            <input type="number" name="shelf" class="form-control mb-2"
-                                                placeholder="On shelf" value="" />
-                                            <span class="text-danger"> {{ $errors->first('shelf') }} </span>
-                                            <input type="number" name="warehouse" class="form-control mb-2"
-                                                placeholder="In warehouse" />
-                                            <span class="text-danger"> {{ $errors->first('warehouse') }} </span>
+                                            <input type="number" name="quantity_on_shelf" class="form-control mb-2"
+                                                placeholder="Quantity on shelf" value="" />
+                                            <span class="text-danger"> {{ $errors->first('quantity_on_shelf') }} </span>
+                                            </div>
+                                        <div class="d-flex gap-3">
+                                            <input type="number" name="quantity_in_warehouse" class="form-control mb-2"
+                                                placeholder="Quantity in warehouse" />
+                                            <span class="text-danger"> {{ $errors->first('quantity_in_warehouse') }} </span>
                                         </div>
                                         <!--end::Input-->
                                         <!--begin::Description-->
