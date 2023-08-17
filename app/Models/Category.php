@@ -30,6 +30,6 @@ class Category extends Model
     }
 
     public function product() {
-        return $this->belongsToMany(Product::class, 'product_brand_categories');
+        return $this->belongsToMany(Product::class, 'product_brand_category');
     }
 }

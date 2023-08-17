@@ -17,7 +17,7 @@ class BrandController extends Controller
     public function index()
     {
         $brands = Brand::select('id', 'name', 'logo', 'status', 'description', 'url')->with('categories')->get();
-        return view('brand.brandList', [
+        return view('admin.brand.brandList', [
             'brands' => $brands,
         ]);
     }
@@ -28,7 +28,7 @@ class BrandController extends Controller
     public function create()
     {
         $categories = Category::select('id', 'name')->get();
-        return view('brand.createBrand', [
+        return view('admin.brand.createBrand', [
             'categories' => $categories,
         ]);
     }
@@ -70,7 +70,7 @@ class BrandController extends Controller
             $id = decrypt($id);
             $brand = Brand::findOrfail($id);
             if ($brand) {
-                return view('brand.editBrand', ['brand' => $brand]);
+                return view('admin.brand.editBrand', ['brand' => $brand]);
             }
         } catch (\Throwable $th) {
             $request->session()->flash("error", 'Requested Brand doesn\'t exit!!');
@@ -89,7 +89,7 @@ class BrandController extends Controller
 
             if ($brand) {
                 $categories = Category::all();
-                return view('brand.editBrand', ['brand' => $brand, 'categories' => $categories]);
+                return view('admin.brand.editBrand', ['brand' => $brand, 'categories' => $categories]);
             }
         } catch (\Throwable $th) {
             $request->session()->flash("error", 'Requested Brand doesn\'t exit!!');

@@ -1,5 +1,5 @@
-@extends('admin.home')
-
+@extends('admin.layouts.home')
+@section('title', 'Update Product')
 @section('content')
 <!--begin::Content container-->
 <div id="kt_app_content_container" class="app-container container-xxl">

@@ -1,5 +1,5 @@
-@extends('admin.home')
-
+@extends('admin.layouts.home')
+@section('title', 'Product List')
 @section('content')
 <!--begin::Content container-->
 <div id="kt_app_content_container" class="app-container container-xxl">
@@ -183,12 +183,12 @@
                             <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4" data-kt-menu="true">
                                 <!--begin::Menu item-->
                                 <div class="menu-item px-3">
-                                    <a href="{{ route('product.edit', encrypt($product->id)) }}" class="menu-link px-3">Edit</a>
+                                    {{-- <a href="{{ route('product.edit', encrypt($product->id)) }}" class="menu-link px-3">Edit</a> --}}
                                 </div>
                                 <!--end::Menu item-->
                                 <!--begin::Menu item-->
                                 <div class="menu-item px-3">
-                                    <form method="post" action="{{ route('product.destroy', encrypt($product->id)) }}">
+                                    {{-- <form method="post" action="{{ route('product.destroy', encrypt($product->id)) }}"> --}}
                                         @csrf
                                         @method('delete')
                                         <button class="menu-link px-3 btn btn-outline-danger"> Delete </button>

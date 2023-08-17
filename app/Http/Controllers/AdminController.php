@@ -8,7 +8,7 @@ class AdminController extends Controller
 {
     // call to admin home page
     public function home(){
-        return view('admin.home');
+        return view('admin.layouts.home');
     }
     
     public function dashboard(Request $request){

@@ -17,12 +17,12 @@ class CategoryController extends Controller
         if ($request->ajax()) {
             $page = $request->input('page', 1);
             $categories = Category::orderBy('id')->paginate(10, ['*'], 'page', $page);
-            return view('category.categoriesList', compact('categories'));
+            return view('admin.category.categoriesList', compact('categories'));
         }
 
         // For initial load
         $categories = Category::orderBy('id')->paginate(10);
-        return view('category.categoriesList', compact('categories'));
+        return view('admin.category.categoriesList', compact('categories'));
     }
 
     /**
@@ -31,7 +31,7 @@ class CategoryController extends Controller
     public function create()
     {
         $parentCategory = Category::select('id', 'name')->get();
-        return view('category.createCategory', [
+        return view('admin.category.createCategory', [
             'categories' => $parentCategory,
         ]);
     }
@@ -73,7 +73,7 @@ class CategoryController extends Controller
             $category = Category::findOrfail($id);
             $categories = Category::select('id', 'parent_id', 'name')->get();
             if ($category) {
-                return view('category.editcategory', compact('category', 'categories'));
+                return view('admin.category.editcategory', compact('category', 'categories'));
             }
         } catch (\Throwable $th) {
             $request->session()->flash("error", 'Requested category doesn\'t exit!!');
@@ -91,7 +91,7 @@ class CategoryController extends Controller
             $category = Category::findOrfail($id);
             $categories = Category::select('id', 'parent_id', 'name')->get();
             if ($category) {
-                return view('category.editcategory', compact('category', 'categories'));
+                return view('admin.category.editcategory', compact('category', 'categories'));
             }
         } catch (\Throwable $th) {
             $request->session()->flash("error", 'Requested category doesn\'t exit!!');

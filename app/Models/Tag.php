@@ -19,4 +19,9 @@ class Tag extends Model
     {
         return ucwords($value);
     }
+
+    public function products()
+    {
+        return $this->belongsToMany(Product::class, 'product_tags');
+    }
 }

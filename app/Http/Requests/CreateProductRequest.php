@@ -29,23 +29,21 @@ class CreateProductRequest extends FormRequest
             'brand' => 'required|numeric',
             'category' => 'required|numeric',
             'tags' => 'required|array',
-            'images' => 'required|array',
+            // 'images' => 'required|array',
             'base_price' => 'required|numeric|min:0.01',
             'sale_price' => 'required|numeric|min:0.01',
-            'shelf' => 'required|integer|min:0',
-            'warehouse' => 'required|integer|min:0',
-            'variation_name' => 'required',
-            'variation_value' => 'required',
+            'quantity_on_shelf' => 'required|integer|min:0',
+            'quantity_in_warehouse' => 'required|integer|min:0', 
+            'kt_ecommerce_add_product_options' => 'required|array'
         ];
     }
 
     public function messages(): array
     {
         return [
-            'shelf' => 'Please provide how many products present in shelf',
-            'warehouse' => 'required|integer|min:0',
-            'variation_name' => 'Product variation is required.',
-            'variation_value' => 'Please provide value for the variation.',
+            'quantity_on_shelf' => 'Please provide how many products present on shelf.',
+            'quantity_in_warehouse' => 'Please provide how many products present in warehouse.',
+            'kt_ecommerce_add_product_options' => 'Add atleast one variation to the product.',
         ];
     }
 }

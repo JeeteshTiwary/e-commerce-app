@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
+use App\Models\Product_Detail;
 use App\Models\Tag;
 use App\Models\Variation;
 use Illuminate\Http\Request;
@@ -41,26 +42,33 @@ class ProductController extends Controller
      */
     public function store(CreateProductRequest $request)
     {
-        dd($request);
-        $validated = $request->validated();
-        dd($validated);
-        if ($request->hasFile('thumbnail')) {
-            $file = $request->file('thumbnail');
-            $extension = $file->getClientOriginalExtension();
-            $fileName = time() . '.' . $extension;
-            $path = public_path('products/thumbnails');
-            $uplaod = $file->move($path, $fileName);
-            $validated['thumbnail'] = $fileName;
-        }
-        dd($validated);
+        try {
+            // dd($request);
+            $validated = $request->validated();
+            if ($request->hasFile('thumbnail')) {
+                $file = $request->file('thumbnail');
+                $extension = $file->getClientOriginalExtension();
+                $fileName = time() . '.' . $extension;
+                $path = public_path('products/thumbnails');
+                $uplaod = $file->move($path, $fileName);
+                $validated['thumbnail'] = $fileName;
+            }
+            // dd($validated);
 
-        $product = Product::create($validated);
-        $product->brandCategories()->attach($request->input('brand_category_id'));
+            $product = Product::create($validated);
+            $tags =  $validated['tags'];
+            $product->tags()->attach($tags);
+            dd($tags);
+            $product->productDetails()->attach($validated);
+            dd($product);
+            $product->brand()->attach($validated);
+            $product->category()->attach($validated);
 
-        if ($product) {
-            $request->session()->flash("success", $validated['name'] . ' product has been added successfully!!');
-            return redirect()->route('product.index');
-        } else {
+            if ($product) {
+                $request->session()->flash("success", $validated['name'] . ' product has been added successfully!!');
+                return redirect()->route('product.index');
+            }
+        } catch (\Throwable $th) {
             $request->session()->flash("error", 'Something went Wrong!!');
             return redirect()->route('product.index');
         }
@@ -75,7 +83,7 @@ class ProductController extends Controller
         $brands = Brand::select('id', 'name')->get();
         $tags = Tag::select('id', 'name')->get();
         $variations = Variation::select('id', 'name')->get();
-        return view('admin.products.create', compact('categories', 'brands', 'tags', 'variations'));
+        return view('admin.products.editProduct', compact('categories', 'brands', 'tags', 'variations'));
     }
 
     /**
