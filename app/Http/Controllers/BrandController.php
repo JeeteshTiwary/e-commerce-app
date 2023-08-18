@@ -51,7 +51,7 @@ class BrandController extends Controller
 
         $brand = Brand::create($validated);
 
-        $brand->categories()->attach($categories);
+        $brand->categories()->attach($categories, ['created_at' => now(), 'updated_at' => now()]);
 
         if ($brand) {
             $request->session()->flash('Success', $validated['name'] . ' brand has been added successfully!');

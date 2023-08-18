@@ -46,7 +46,7 @@ class CategoryController extends Controller
         if ($request->hasFile('thumbnail')) {
             $file = $request->file('thumbnail');
             $extension = $file->getClientOriginalExtension();
-            $fileName = time() . '.' . $extension;
+            $fileName = $validated['name'] . time() . '.' . $extension;
             $path = public_path('categories/thumbnails');
             $uplaod = $file->move($path, $fileName);
             $validated['thumbnail'] = $fileName;
@@ -112,7 +112,7 @@ class CategoryController extends Controller
                 if ($request->hasFile('thumbnail')) {
                     $file = $request->file('thumbnail');
                     $extension = $file->getClientOriginalExtension();
-                    $fileName = time() . '.' . $extension;
+                    $fileName = $validated['name'] . time() . '.' . $extension;
                     $path = public_path('categories/thumbnails');
                     $uplaod = $file->move($path, $fileName);
                     if ($category->thumbnail && file_exists($path . '/' . $category->thumbnail)) {
@@ -177,8 +177,8 @@ class CategoryController extends Controller
             Category::whereIn('id', $ids)->delete();
             return redirect()->back()->with("success", ' selected categories has been deleted successfully!!');
         } catch (\Throwable $th) {
-           return redirect()->back()->with("error", 'Requested category doesn\'t exit!!');
+            return redirect()->back()->with("error", 'Requested category doesn\'t exit!!');
         }
     }
-    
+
 }

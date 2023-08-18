@@ -10,7 +10,8 @@ use App\Models\Tag;
 use App\Models\Variation;
 use Illuminate\Http\Request;
 use App\Http\Requests\CreateProductRequest;
-
+use App\Http\Requests\UpdateProductRequest;
+use Illuminate\Support\Facades\DB;
 
 class ProductController extends Controller
 {
@@ -19,11 +20,11 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::all();
-        return view('admin.products.productList', [
-            'products' => $products,
-        ]);
+        $products = Product::with(['brand', 'category', 'tags', 'variations'])->get();
+
+        return view('admin.products.productList', compact('products'));
     }
+
 
     /**
      * Show the form for creating a new resource.
@@ -43,36 +44,51 @@ class ProductController extends Controller
     public function store(CreateProductRequest $request)
     {
         try {
-            // dd($request);
             $validated = $request->validated();
+
             if ($request->hasFile('thumbnail')) {
                 $file = $request->file('thumbnail');
                 $extension = $file->getClientOriginalExtension();
-                $fileName = time() . '.' . $extension;
+                $fileName = $validated['name'] . time() . '.' . $extension;
                 $path = public_path('products/thumbnails');
-                $uplaod = $file->move($path, $fileName);
+                $file->move($path, $fileName);
                 $validated['thumbnail'] = $fileName;
             }
-            // dd($validated);
 
-            $product = Product::create($validated);
-            $tags =  $validated['tags'];
-            $product->tags()->attach($tags);
-            dd($tags);
-            $product->productDetails()->attach($validated);
-            dd($product);
-            $product->brand()->attach($validated);
-            $product->category()->attach($validated);
+            $product = Product::create([
+                'name' => $validated['name'],
+                'updated_by' => auth()->user()->id,
+            ]);
 
-            if ($product) {
-                $request->session()->flash("success", $validated['name'] . ' product has been added successfully!!');
-                return redirect()->route('product.index');
-            }
+            $productDetail = $product->productDetails()->create([
+                'description' => $validated['description'],
+                'thumbnail' => $validated['thumbnail'],
+                'status' => $validated['status'],
+                'base_price' => $validated['base_price'],
+                'sale_price' => $validated['sale_price'],
+                'quantity_on_shelf' => $validated['quantity_on_shelf'],
+                'quantity_in_warehouse' => $validated['quantity_in_warehouse'],
+            ]);
+
+            $product->tags()->attach($validated['tags'], ['created_at' => now(), 'updated_at' => now()]);
+            $product->variations()->attach($validated['kt_ecommerce_add_product_options'], ['created_at' => now(), 'updated_at' => now()]);
+            $product->brand()->attach([
+                $validated['brand_id'] => [
+                    'category_id' => $validated['category_id'],
+                    'created_at' => now(),
+                    'updated_at' => now(),
+                ]
+            ]);
+
+            $request->session()->flash("success", $validated['name'] . ' product has been added successfully!!');
+            return redirect()->route('product.index');
         } catch (\Throwable $th) {
+            dd($th);
             $request->session()->flash("error", 'Something went Wrong!!');
             return redirect()->route('product.index');
         }
     }
+
 
     /**
      * Display the specified resource.
@@ -101,9 +117,66 @@ class ProductController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateProductRequest $request, string $id)
     {
-        //
+        try {
+            $id = decrypt($id);
+
+            $product = Product::findOrFail($id);
+            if ($product) {
+                $validated = $request->validated();
+
+                if ($request->hasFile('thumbnail')) {
+                    $file = $request->file('thumbnail');
+                    $extension = $file->getClientOriginalExtension();
+                    $fileName = $validated['name'] . time() . '.' . $extension;
+                    $path = public_path('products/thumbnails');
+                    $uplaod = $file->move($path, $fileName);
+                    if ($product->thumbnail && file_exists($path . '/' . $product->thumbnail)) {
+                        unlink($path . '/' . $product->thumbnail);
+                    }
+                    $validated['thumbnail'] = $fileName;
+                } else {
+                    $validated['thumbnail'] = $product->thumbnail;
+                }
+
+                $product->update([
+                    'name' => $validated['name'],
+                    'updated_by' => auth()->user()->id,
+                ]);
+
+                $productDetail = $product->productDetails()->update([
+                    'description' => $validated['description'],
+                    'thumbnail' => $validated['thumbnail'],
+                    'status' => $validated['status'],
+                    'base_price' => $validated['base_price'],
+                    'sale_price' => $validated['sale_price'],
+                    'quantity_on_shelf' => $validated['quantity_on_shelf'],
+                    'quantity_in_warehouse' => $validated['quantity_in_warehouse'],
+                ]);
+
+                $product->tags()->sync($validated['tags'], ['updated_at' => now()]);
+
+                $product->variations()->sync($validated['kt_ecommerce_add_product_options'], ['updated_at' => now()]);
+
+                $product->brand()->sync([
+                    $validated['brand_id'] => [
+                        'category_id' => $validated['category_id'],
+                        'updated_at' => now(),
+                    ]
+                ]);
+
+                $request->session()->flash("success", $validated['name'] . ' product has been updated successfully!!');
+                return redirect()->route('product.index');
+            } else {
+                $request->session()->flash("error", 'Requested product not found!!');
+                return redirect()->route('product.index');
+            }
+        } catch (\Throwable $th) {
+            dd($th);
+            $request->session()->flash("error", 'Something went Wrong!!');
+            return redirect()->route('product.index');
+        }
     }
 
     /**

@@ -20,18 +20,19 @@ class Product extends Model
         return ucwords($value);
     }
 
-    public function productDetails(){
+    public function productDetails()
+    {
         return $this->hasOne(Product_Detail::class);
     }
 
     public function brand()
     {
-        return $this->hasOne(Brand::class, 'product_brand_category');
+        return $this->belongsToMany(Brand::class, 'product_brand_category');
     }
 
     public function category()
     {
-        return $this->hasOne(Category::class, 'product_brand_category');
+        return $this->belongsToMany(Category::class, 'product_brand_category');
     }
 
     public function images()
