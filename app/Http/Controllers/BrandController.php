@@ -38,27 +38,32 @@ class BrandController extends Controller
      */
     public function store(CreateBrandRequest $request)
     {
-        $validated = $request->validated();
-        if ($request->hasFile('logo')) {
-            $file = $request->file('logo');
-            $extension = $file->getClientOriginalExtension();
-            $fileName = time() . '.' . $extension;
-            $path = public_path('brands/logos');
-            $uplaod = $file->move($path, $fileName);
-            $validated['logo'] = $fileName;
-        }
-        $categories = $validated['categories'];
+        try {
 
-        $brand = Brand::create($validated);
+            $validated = $request->validated();
+            if ($request->hasFile('logo')) {
+                $file = $request->file('logo');
+                $extension = $file->getClientOriginalExtension();
+                $fileName = time() . '.' . $extension;
+                $path = public_path('brands/logos');
+                $uplaod = $file->move($path, $fileName);
+                $validated['logo'] = $fileName;
+            }
+            $categories = $validated['categories'];
 
-        $brand->categories()->attach($categories, ['created_at' => now(), 'updated_at' => now()]);
+            $brand = Brand::create($validated);
 
-        if ($brand) {
-            $request->session()->flash('Success', $validated['name'] . ' brand has been added successfully!');
+            $brand->categories()->attach($categories, ['created_at' => now(), 'updated_at' => now()]);
+
+            if ($brand) {
+                $request->session()->flash('Success', $validated['name'] . ' brand has been added successfully!');
+                return redirect()->route('brand.index');
+            }
+        } catch (\Throwable $th) {
+            //throw $th;
+            $request->session()->flash("error", 'something went wrong!!');
             return redirect()->route('brand.index');
         }
-        $request->session()->flash("error", 'something went wrong!!');
-        return redirect()->route('brand.index');
     }
 
     /**
@@ -165,7 +170,7 @@ class BrandController extends Controller
         }
     }
 
-    public function deleteMultiple(Request $request)
+    public function deleteMultipleBrands(Request $request)
     {
         try {
             $ids = $request->brand_ids;
@@ -173,7 +178,7 @@ class BrandController extends Controller
                 return redirect()->back()->with("error", 'No brand has been seleted to delete!!');
             }
             Brand::whereIn('id', $ids)->delete();
-            return redirect()->back()->with("success", ' selected categories has been deleted successfully!!');
+            return redirect()->back()->with("success", ' Selected brands has been deleted successfully!!');
         } catch (\Throwable $th) {
             return redirect()->back()->with("error", 'Requested brand doesn\'t exit!!');
         }

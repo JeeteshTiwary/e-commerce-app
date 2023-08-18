@@ -120,22 +120,27 @@
                                         <!--begin::Badges-->
                                         @php
                                             $status = null;
+                                            $class = null;
                                             switch ($brand->status) {
                                                 case '0':
-                                                    $status = 'unpublished';
+                                                    $status = 'Unpublished';
+                                                    $class = 'badge badge-light-danger';
                                                     break;
                                                 case '1':
-                                                    $status = 'published';
+                                                    $status = 'Published';
+                                                    $class = 'badge badge-light-success';
                                                     break;
                                                 case '2':
-                                                    $status = 'scheduled';
-                                                    break;                                            
+                                                    $status = 'Scheduled';
+                                                    $class = 'badge badge-light-warning';
+                                                    break;
                                                 default:
-                                                    $status = 'unknown';
+                                                    $status = 'Unknown';
+                                                    $class = 'badge badge-light-secondary';
                                                     break;
                                             }
                                         @endphp
-                                        <div class="badge badge-light-success"> {{ $status }} </div>
+                                        <div class="{{ $class }}">{{ $status }}</div>
                                         <!--end::Badges-->
                                     </td>
                                     <!--end::Status=-->

@@ -20,8 +20,7 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::with(['brand', 'category', 'tags', 'variations'])->get();
-
+        $products = Product::select('id', 'name')->with('brand', 'productDetails')->get();
         return view('admin.products.productList', compact('products'));
     }
 
@@ -49,7 +48,7 @@ class ProductController extends Controller
             if ($request->hasFile('thumbnail')) {
                 $file = $request->file('thumbnail');
                 $extension = $file->getClientOriginalExtension();
-                $fileName = $validated['name'] . time() . '.' . $extension;
+                $fileName = time() . '.' . $extension;
                 $path = public_path('products/thumbnails');
                 $file->move($path, $fileName);
                 $validated['thumbnail'] = $fileName;
@@ -129,7 +128,7 @@ class ProductController extends Controller
                 if ($request->hasFile('thumbnail')) {
                     $file = $request->file('thumbnail');
                     $extension = $file->getClientOriginalExtension();
-                    $fileName = $validated['name'] . time() . '.' . $extension;
+                    $fileName = time() . '.' . $extension;
                     $path = public_path('products/thumbnails');
                     $uplaod = $file->move($path, $fileName);
                     if ($product->thumbnail && file_exists($path . '/' . $product->thumbnail)) {
@@ -182,8 +181,63 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(string $id, Request $request)
     {
-        //
+        dd('delete');
+        try {
+            $id = decrypt($id);
+            $product = Product::findOrfail($id);
+            if ($product) {
+                $path = public_path('products/thumbnail');
+                if (file_exists(file_exists($path . '/' . $product->thumbnail))) {
+                    unlink($path . '/' . $product->thumbnail);
+                }
+                $product->productDetails()->detach();
+                $product->brand()->detach();
+                $product->category()->detach();
+                $product->tags()->detach();
+                $product->variations()->detach();
+                $delete = $product->delete();
+                if ($delete) {
+                    return redirect()->back()->with("success", $product->name . ' has been deleted successfully!!');
+                    // return redirect()->route('product.index');
+                }
+                return redirect()->back()->with("error", 'some error occured during delete!!');
+                // return redirect()->route('product.index');
+            }
+        } catch (\Throwable $th) {
+           return redirect()->back()->with("error", 'Requested Product doesn\'t exit!!');
+            // return redirect()->route('product.index');
+        }
     }
+
+    /**
+     * Delete multiple records from storage.
+     */
+    public function deleteMultipleProducts(Request $request)
+    {
+        $delete = null;
+        try {
+            $ids = $request->product_ids;
+            if (!$ids) {
+                return redirect()->back()->with("error", 'No product has been seleted to delete!!');
+            }
+            foreach ($ids as $product) {
+                $product->productDetails()->detach();
+                dd($delete);
+                $product->brand()->detach();
+                $product->category()->detach();
+                $product->tags()->detach();
+                $product->variations()->detach();
+                $delete = $product->delete();
+            }
+            // Category::whereIn('id', $ids)->delete();
+            if ($delete) {
+                return redirect()->back()->with("success", ' Selected products has been deleted successfully!!');
+            }
+        } catch (\Throwable $th) {
+            return redirect()->back()->with("error", 'Requested product doesn\'t exit!!');
+        }
+    }
+
 }

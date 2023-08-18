@@ -46,7 +46,7 @@ class CategoryController extends Controller
         if ($request->hasFile('thumbnail')) {
             $file = $request->file('thumbnail');
             $extension = $file->getClientOriginalExtension();
-            $fileName = $validated['name'] . time() . '.' . $extension;
+            $fileName = time() . '.' . $extension;
             $path = public_path('categories/thumbnails');
             $uplaod = $file->move($path, $fileName);
             $validated['thumbnail'] = $fileName;
@@ -112,7 +112,7 @@ class CategoryController extends Controller
                 if ($request->hasFile('thumbnail')) {
                     $file = $request->file('thumbnail');
                     $extension = $file->getClientOriginalExtension();
-                    $fileName = $validated['name'] . time() . '.' . $extension;
+                    $fileName = time() . '.' . $extension;
                     $path = public_path('categories/thumbnails');
                     $uplaod = $file->move($path, $fileName);
                     if ($category->thumbnail && file_exists($path . '/' . $category->thumbnail)) {
@@ -167,7 +167,7 @@ class CategoryController extends Controller
     /**
      * Delete multiple records from storage.
      */
-    public function deleteMultiple(Request $request)
+    public function deleteMultipleCategories(Request $request)
     {
         try {
             $ids = $request->category_ids;
@@ -175,7 +175,7 @@ class CategoryController extends Controller
                 return redirect()->back()->with("error", 'No category has been seleted to delete!!');
             }
             Category::whereIn('id', $ids)->delete();
-            return redirect()->back()->with("success", ' selected categories has been deleted successfully!!');
+            return redirect()->back()->with("success", ' Selected categories has been deleted successfully!!');
         } catch (\Throwable $th) {
             return redirect()->back()->with("error", 'Requested category doesn\'t exit!!');
         }
