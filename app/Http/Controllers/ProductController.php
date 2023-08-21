@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Brand;
 use App\Models\Category;
 use App\Models\Product;
-use App\Models\Product_Detail;
+use App\Models\ProductImage;
 use App\Models\Tag;
 use App\Models\Variation;
 use Illuminate\Http\Request;
@@ -20,7 +20,9 @@ class ProductController extends Controller
      */
     public function index()
     {
-        $products = Product::select('id', 'name')->with('brand', 'productDetails')->get();
+        $products = Product::select('id', 'name')
+            ->with('brand', 'productDetails', 'category')
+            ->paginate(15);
         return view('admin.products.productList', compact('products'));
     }
 
@@ -59,6 +61,20 @@ class ProductController extends Controller
                 'updated_by' => auth()->user()->id,
             ]);
 
+            if ($request->hasFile('images')) {
+                foreach ($request->file('images') as $image) {
+                    $imageName = time() . '.' . $image->getClientOriginalName();
+                    $path = public_path('products/images');
+                    $image->move($path, $imageName);
+
+                    $productImage = ProductImage::create(['image' => $imageName]);
+                    dd($productImage);
+                    $product->images()->attach($productImage->id);
+                    dd($product->images);
+                }
+            }
+
+
             $productDetail = $product->productDetails()->create([
                 'description' => $validated['description'],
                 'thumbnail' => $validated['thumbnail'],
@@ -82,8 +98,8 @@ class ProductController extends Controller
             $request->session()->flash("success", $validated['name'] . ' product has been added successfully!!');
             return redirect()->route('product.index');
         } catch (\Throwable $th) {
-            dd($th);
-            $request->session()->flash("error", 'Something went Wrong!!');
+            // dd($th);
+            $request->session()->flash("error", 'Error occured while storing product details, you may not have provided product details properly.');
             return redirect()->route('product.index');
         }
     }
@@ -94,11 +110,18 @@ class ProductController extends Controller
      */
     public function show(string $id)
     {
-        $categories = Category::select('id', 'name')->get();
-        $brands = Brand::select('id', 'name')->get();
-        $tags = Tag::select('id', 'name')->get();
-        $variations = Variation::select('id', 'name')->get();
-        return view('admin.products.editProduct', compact('categories', 'brands', 'tags', 'variations'));
+        try {
+            $product = Product::findOrFail(decrypt($id));
+            $categories = Category::select('id', 'name')->get();
+            $brands = Brand::select('id', 'name')->get();
+            $tags = Tag::select('id', 'name')->get();
+            $variations = Variation::select('id', 'name')->get();
+
+            return view('admin.products.editProduct', compact('product', 'categories', 'brands', 'tags', 'variations'));
+        } catch (\Throwable $th) {
+            dd($th);
+            return redirect()->back()->with("error", 'Requested product doesn\'t exit!!');
+        }
     }
 
     /**
@@ -106,11 +129,19 @@ class ProductController extends Controller
      */
     public function edit(string $id)
     {
-        $categories = Category::select('id', 'name')->get();
-        $brands = Brand::select('id', 'name')->get();
-        $tags = Tag::select('id', 'name')->get();
-        $variations = Variation::select('id', 'name')->get();
-        return view('admin.products.editProduct', compact('categories', 'brands', 'tags', 'variations'));
+        try {
+            $product = Product::findOrFail(decrypt($id));
+            $categories = Category::select('id', 'name')->get();
+            $brands = Brand::select('id', 'name')->get();
+            $tags = Tag::select('id', 'name')->get();
+            $variations = Variation::select('id', 'name')->get();
+
+            return view('admin.products.editProduct', compact('product', 'categories', 'brands', 'tags', 'variations'));
+        } catch (\Throwable $th) {
+            dd($th);
+            return redirect()->back()->with("error", 'Requested product doesn\'t exit!!');
+        }
+
     }
 
     /**
@@ -120,23 +151,21 @@ class ProductController extends Controller
     {
         try {
             $id = decrypt($id);
-
             $product = Product::findOrFail($id);
             if ($product) {
                 $validated = $request->validated();
-
                 if ($request->hasFile('thumbnail')) {
                     $file = $request->file('thumbnail');
                     $extension = $file->getClientOriginalExtension();
                     $fileName = time() . '.' . $extension;
                     $path = public_path('products/thumbnails');
                     $uplaod = $file->move($path, $fileName);
-                    if ($product->thumbnail && file_exists($path . '/' . $product->thumbnail)) {
-                        unlink($path . '/' . $product->thumbnail);
+                    if ($product->productDetails->thumbnail && file_exists($path . '/' . $product->productDetails->thumbnail)) {
+                        unlink($path . '/' . $product->productDetails->thumbnail);
                     }
                     $validated['thumbnail'] = $fileName;
                 } else {
-                    $validated['thumbnail'] = $product->thumbnail;
+                    $validated['thumbnail'] = $product->productDetails->thumbnail;
                 }
 
                 $product->update([
@@ -154,9 +183,8 @@ class ProductController extends Controller
                     'quantity_in_warehouse' => $validated['quantity_in_warehouse'],
                 ]);
 
-                $product->tags()->sync($validated['tags'], ['updated_at' => now()]);
-
-                $product->variations()->sync($validated['kt_ecommerce_add_product_options'], ['updated_at' => now()]);
+                $product->tags()->sync($validated['tags'], ['created_at' => now(), 'updated_at' => now()]);
+                $product->variations()->syncWithoutDetaching($validated['kt_ecommerce_add_product_options'], ['created_at' => now(), 'updated_at' => now()]);
 
                 $product->brand()->sync([
                     $validated['brand_id'] => [
@@ -172,8 +200,8 @@ class ProductController extends Controller
                 return redirect()->route('product.index');
             }
         } catch (\Throwable $th) {
-            dd($th);
-            $request->session()->flash("error", 'Something went Wrong!!');
+            // dd($th);
+            $request->session()->flash("error", 'Error occured while updating product details, you may not have provided product details properly.');
             return redirect()->route('product.index');
         }
     }
@@ -181,33 +209,29 @@ class ProductController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id, Request $request)
+    public function destroy(string $id)
     {
-        dd('delete');
         try {
             $id = decrypt($id);
             $product = Product::findOrfail($id);
             if ($product) {
-                $path = public_path('products/thumbnail');
-                if (file_exists(file_exists($path . '/' . $product->thumbnail))) {
-                    unlink($path . '/' . $product->thumbnail);
+                $path = public_path('products/thumbnails');
+                if (file_exists($path . '/' . $product->productDetails->thumbnail)) {
+                    unlink($path . '/' . $product->productDetails->thumbnail);
                 }
-                $product->productDetails()->detach();
                 $product->brand()->detach();
                 $product->category()->detach();
                 $product->tags()->detach();
                 $product->variations()->detach();
+                $product->productDetails()->delete();
                 $delete = $product->delete();
                 if ($delete) {
                     return redirect()->back()->with("success", $product->name . ' has been deleted successfully!!');
-                    // return redirect()->route('product.index');
                 }
-                return redirect()->back()->with("error", 'some error occured during delete!!');
-                // return redirect()->route('product.index');
+                return redirect()->back()->with("error", 'Some error occured while deleting the product!!');
             }
         } catch (\Throwable $th) {
-           return redirect()->back()->with("error", 'Requested Product doesn\'t exit!!');
-            // return redirect()->route('product.index');
+            return redirect()->back()->with("error", 'Requested Product doesn\'t exit!!');
         }
     }
 
@@ -222,15 +246,19 @@ class ProductController extends Controller
             if (!$ids) {
                 return redirect()->back()->with("error", 'No product has been seleted to delete!!');
             }
-            foreach ($ids as $product) {
-                $product->productDetails()->detach();
-                dd($delete);
-                $product->brand()->detach();
-                $product->category()->detach();
-                $product->tags()->detach();
-                $product->variations()->detach();
-                $delete = $product->delete();
+            foreach ($ids as $productId) {
+                $product = Product::find($productId);
+                if ($product) {
+                    $product->productDetails->delete();
+                    // dd($product);
+                    $product->brand()->detach();
+                    $product->category()->detach();
+                    $product->tags()->detach();
+                    $product->variations()->detach();
+                    $delete = $product->delete();
+                }
             }
+
             // Category::whereIn('id', $ids)->delete();
             if ($delete) {
                 return redirect()->back()->with("success", ' Selected products has been deleted successfully!!');

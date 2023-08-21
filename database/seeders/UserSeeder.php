@@ -24,5 +24,16 @@ class UserSeeder extends Seeder
             'role_id' => 1,
         ];
         User::create($user);
+
+        // Seed a user with role_id = 2 (user)
+        $user = [
+            'name' => 'Jmt user',
+            'email' => 'jmt.user@mailinator.com',
+            'contact_no' => '9898989898',
+            'address' => 'Narola Nashik',
+            'password' => Hash::make('jmt.user@mailinator.com'),
+            'role_id' => 2,
+        ];
+        User::create($user);
     }
 }

@@ -68,6 +68,7 @@
 <script src="https://cdn.amcharts.com/lib/5/geodata/worldLow.js"></script>
 <script src="https://cdn.amcharts.com/lib/5/geodata/continentsLow.js"></script>
 <script src="https://cdn.amcharts.com/lib/5/geodata/usaLow.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dropzone/5.9.2/min/dropzone.min.js"></script>
 <script src="https://cdn.amcharts.com/lib/5/geodata/worldTimeZonesLow.js"></script>
 <script src="https://cdn.amcharts.com/lib/5/geodata/worldTimeZoneAreasLow.js"></script>
 <script src="{{asset('admin/dist/assets/plugins/custom/datatables/datatables.bundle.js')}}"></script>
@@ -84,11 +85,26 @@
 <script src="{{asset('admin/dist/assets/js/custom/sortDatas.js')}}"></script>
 <script src="{{asset('admin/dist/assets/js/custom/apps/ecommerce/catalog/save-product.js')}}"></script>
 <script src="{{asset('admin/dist/assets/plugins/custom/formrepeater/formrepeater.bundle.js')}}"></script>
+<script src="{{asset('admin/dist/assets/js/custom/apps/ecommerce/customers/listing/listing.js')}}"></script>
+<script src="{{asset('admin/dist/assets/js/custom/apps/ecommerce/customers/listing/add.js')}}"></script>
+<script src="{{asset('admin/dist/assets/js/custom/apps/ecommerce/customers/listing/export.js')}}"></script>
+<script src="{{asset('admin/dist/assets/js/custom/apps/ecommerce/catalog/products.js')}}"></script>
+<script src="{{ asset('node_modules/dropzone/dist/dropzone-min.js') }}"></script>
+
 <script>
     var endpoint = "{{ route('category.index') }}";
 
 </script>
 <script src="{{ asset('admin/dist/assets/js/custom/lazyLoading.js') }}"></script>
+<script>
+    Dropzone.options.dropzone = {
+        paramName: 'images[]'
+        , maxFiles: 10
+        , acceptedFiles: 'image/*'
+        , addRemoveLinks: true
+    , };
+
+</script>
 
 <!--end::Custom Javascript-->
 <!--end::Javascript-->

@@ -16,19 +16,19 @@
             <!--begin::Content-->
             <div id="kt_app_content" class="app-content flex-column-fluid">
                 @if (Auth::user()->role_id == 1)
-                    @if (url()->full() == 'http://127.0.0.1:8000/admin/home')
-                        <div class="m-5 align-items-center">
-                            {{ 'Hello '.auth()->user()->name .', Welcome on E-Commerce App' }}
-                        </div>
-                    @else
-                        @yield('content')
-                    @endif
+                @if (url()->full() == 'http://127.0.0.1:8000/admin/home')
+                <div class="m-5 align-items-center">
+                    {{ 'Hello '.auth()->user()->name .', Welcome on E-Commerce App' }}
+                </div>
                 @else
-                    <center>
-                        <h1 class="display-6">
-                            {{ 'You Don\'t have access for this page.' }}
-                        </h1>
-                    </center>
+                @yield('content')
+                @endif
+                @else
+                <center>
+                    <h1 class="display-6">
+                        {{ 'You Don\'t have access for this page.' }}
+                    </h1>
+                </center>
                 @endif
             </div>
             <!--end::Content-->

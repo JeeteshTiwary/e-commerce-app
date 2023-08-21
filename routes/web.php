@@ -55,7 +55,6 @@ Route::controller(AdminController::class)->prefix('admin')->name('admin.')->grou
     Route::get('/home', 'home')->name('home');
     Route::get('/dashboard', 'dashboard')->name('dashboard');
     Route::get('/profile', 'editProfile')->name('profile');
-
 })->middleware(['auth', 'verified']);
 
 Route::controller(UserController::class)->name('user.')->group(function () {

@@ -7,7 +7,6 @@ use App\Models\Brand;
 use App\Models\Category;
 use App\Http\Requests\CreateBrandRequest;
 use App\Http\Requests\UpdateBrandRequest;
-use RealRashid\SweetAlert\Facades\Alert;
 
 class BrandController extends Controller
 {
@@ -16,10 +15,8 @@ class BrandController extends Controller
      */
     public function index()
     {
-        $brands = Brand::select('id', 'name', 'logo', 'status', 'description', 'url')->with('categories')->get();
-        return view('admin.brand.brandList', [
-            'brands' => $brands,
-        ]);
+        $brands = Brand::select('id', 'name', 'logo', 'status', 'description', 'url')->with('categories')->orderBy('id')->paginate(15);
+        return view('admin.brand.brandList', compact('brands'));
     }
 
     /**
@@ -28,9 +25,7 @@ class BrandController extends Controller
     public function create()
     {
         $categories = Category::select('id', 'name')->get();
-        return view('admin.brand.createBrand', [
-            'categories' => $categories,
-        ]);
+        return view('admin.brand.createBrand', compact('categories'));
     }
 
     /**
@@ -75,7 +70,7 @@ class BrandController extends Controller
             $id = decrypt($id);
             $brand = Brand::findOrfail($id);
             if ($brand) {
-                return view('admin.brand.editBrand', ['brand' => $brand]);
+                return view('admin.brand.editBrand', compact('brand'));
             }
         } catch (\Throwable $th) {
             $request->session()->flash("error", 'Requested Brand doesn\'t exit!!');
@@ -94,7 +89,7 @@ class BrandController extends Controller
 
             if ($brand) {
                 $categories = Category::all();
-                return view('admin.brand.editBrand', ['brand' => $brand, 'categories' => $categories]);
+                return view('admin.brand.editBrand', compact('brand', 'categories'));
             }
         } catch (\Throwable $th) {
             $request->session()->flash("error", 'Requested Brand doesn\'t exit!!');
@@ -158,15 +153,12 @@ class BrandController extends Controller
                 $brand->categories()->detach();
                 $delete = $brand->delete();
                 if ($delete) {
-                    $request->session()->flash("success", $brand->name . ' has been deleted successfully!!');
-                    return redirect()->route('brand.index');
+                    return redirect()->back()->with("success", $brand->name . ' has been deleted successfully!!');
                 }
-                $request->session()->flash("error", 'some error occured during delete!!');
-                return redirect()->route('brand.index');
+                return redirect()->back()->with("error", 'some error occured during delete!!');
             }
         } catch (\Throwable $th) {
-            $request->session()->flash("error", 'Requested Brand doesn\'t exit!!');
-            return redirect()->route('brand.index');
+            return redirect()->back()->with("error", 'Requested Brand doesn\'t exit!!');
         }
     }
 

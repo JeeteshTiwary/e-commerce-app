@@ -16,12 +16,12 @@ class CategoryController extends Controller
     {
         if ($request->ajax()) {
             $page = $request->input('page', 1);
-            $categories = Category::orderBy('id')->paginate(10, ['*'], 'page', $page);
+            $categories = Category::orderBy('id')->paginate(15, ['*'], 'page', $page);
             return view('admin.category.categoriesList', compact('categories'));
         }
 
         // For initial load
-        $categories = Category::orderBy('id')->paginate(10);
+        $categories = Category::orderBy('id')->paginate(15);
         return view('admin.category.categoriesList', compact('categories'));
     }
 
@@ -152,15 +152,12 @@ class CategoryController extends Controller
                 }
                 $delete = $category->delete();
                 if ($delete) {
-                    $request->session()->flash("success", $category->name . ' category has been deleted successfully!!');
-                    return redirect()->route('category.index');
+                    return redirect()->back()->with("success", $category->name . ' category has been deleted successfully!!');
                 }
-                $request->session()->flash("error", 'Something went Wrong!!');
-                return redirect()->route('category.index');
+                return redirect()->back()->with("error", 'Something went Wrong!!');
             }
         } catch (\Throwable $th) {
-            $request->session()->flash("error", 'Requested category doesn\'t exit!!');
-            return redirect()->route('category.index');
+            return redirect()->back()->with("error", 'Requested category doesn\'t exit!!');
         }
     }
 

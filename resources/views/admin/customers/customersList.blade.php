@@ -1,64 +1,83 @@
 @extends('admin.layouts.home')
-@section('title', 'Brand List')
+@section('title', 'Customers List')
 @section('content')
 <!--begin::Content container-->
+{{-- @dd($customers) --}}
 <div id="kt_app_content_container" class="app-container container-xxl">
-    <form action="{{route('brand.multiple-delete')}}" method="POST">
+    <form action="{{ route('customer.multiple-delete') }}" method="POST">
         @csrf
         @method('delete')
-        <!--begin::Brand-->
-        <div class="card card-flush">
+        <!--begin::Card-->
+        <div class="card">
             <!--begin::Card header-->
-            <div class="card-header align-items-center py-5 gap-2 gap-md-5">
+            <div class="card-header border-0 pt-6">
                 <!--begin::Card title-->
                 <div class="card-title">
                     <!--begin::Search-->
                     <div class="d-flex align-items-center position-relative my-1">
                         <!--begin::Svg Icon | path: icons/duotune/general/gen021.svg-->
-                        <span class="svg-icon svg-icon-1 position-absolute ms-4">
+                        <span class="svg-icon svg-icon-1 position-absolute ms-6">
                             <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <rect opacity="0.5" x="17.0365" y="15.1223" width="8.15546" height="2" rx="1" transform="rotate(45 17.0365 15.1223)" fill="currentColor" />
                                 <path d="M11 19C6.55556 19 3 15.4444 3 11C3 6.55556 6.55556 3 11 3C15.4444 3 19 6.55556 19 11C19 15.4444 15.4444 19 11 19ZM11 5C7.53333 5 5 7.53333 5 11C5 14.4667 7.53333 17 11 17C14.4667 17 17 14.4667 17 11C17 7.53333 14.4667 5 11 5Z" fill="currentColor" />
                             </svg>
                         </span>
                         <!--end::Svg Icon-->
-                        <input type="text" data-kt-ecommerce-Brand-filter="search" class="form-control form-control-solid w-250px ps-14" placeholder="Search Brand" />
+                        <input type="text" data-kt-customer-table-filter="search" class="form-control form-control-solid w-250px ps-15" placeholder="Search Customers" />
                     </div>
                     <!--end::Search-->
                 </div>
-                <!--end::Card title-->
+                <!--begin::Card title-->
                 <!--begin::Card toolbar-->
                 <div class="card-toolbar">
-                    <!--begin::Add brand-->
-                    <a href=" {{ route('brand.create') }}" class="btn btn-primary mx-3">Add
-                        Brand</a>
-                    <!--end::Add brand-->
-                    <!--begin::Delete selected brand-->
-                    <button class="btn btn-danger" type="submit"> Delete Seleted Brands </button>
-                    <!--end::Delete selected brand-->
+                    <!--begin::Toolbar-->
+                    <div class="d-flex justify-content-end" data-kt-customer-table-toolbar="base">
+                        <!--begin::Filter-->
+                        <div class="w-150px me-3">
+                            <!--begin::Select2-->
+                            <select class="form-select form-select-solid" data-control="select2" data-hide-search="true" data-placeholder="Status" data-kt-ecommerce-order-filter="status">
+                                <option></option>
+                                <option value="all">All</option>
+                                <option value="0">Active</option>
+                                <option value="incative">Inactive</option>
+                            </select>
+                            <!--end::Select2-->
+                        </div>
+                        <!--end::Filter-->
+                    </div>
+                    <!--end::Toolbar-->
+                    <!--begin::Group actions-->
+                    <div class="d-flex justify-content-end align-items-center d-none" data-kt-customer-table-toolbar="selected">
+                        <div class="fw-bold me-5">
+                            <span class="me-2" data-kt-customer-table-select="selected_count"></span>Selected</div>
+                        <button type="submit" class="btn btn-danger">Delete Selected</button>
+                    </div>
+                    <!--end::Group actions-->
                 </div>
                 <!--end::Card toolbar-->
             </div>
             <!--end::Card header-->
             <!--begin::Card body-->
             <div class="card-body pt-0">
-                @if ($brands->isEmpty())
-                {{ 'No records found' }}
+                @if ($customers->isEmpty())
+                {{ 'No records found.' }}
                 @else
                 <!--begin::Table-->
-                <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_ecommerce_table">
+                <table class="table align-middle table-row-dashed fs-6 gy-5" id="kt_customers_table">
                     <!--begin::Table head-->
                     <thead>
                         <!--begin::Table row-->
                         <tr class="text-start text-gray-400 fw-bold fs-7 text-uppercase gs-0">
                             <th class="w-10px pe-2">
                                 <div class="form-check form-check-sm form-check-custom form-check-solid me-3">
-                                    <input class="form-check-input" type="checkbox" data-kt-check="true" data-kt-check-target="#kt_ecommerce_table .form-check-input" name="brands[]" />
+                                    <input class="form-check-input" type="checkbox" data-kt-check="true" data-kt-check-target="#kt_customers_table .form-check-input" value="1" />
                                 </div>
                             </th>
-                            <th class="min-w-250px">Brand</th>
-                            <th class="min-w-250px">Website</th>
-                            <th class="min-w-150px">Brand Status</th>
+                            <th class="min-w-125px">Customer Name</th>
+                            <th class="min-w-125px">Email</th>
+                            <th class="min-w-125px">Contact</th>
+                            <th class="min-w-125px">Status</th>
+                            <th class="min-w-125px">Created Date</th>
                             <th class="text-end min-w-70px">Actions</th>
                         </tr>
                         <!--end::Table row-->
@@ -66,76 +85,54 @@
                     <!--end::Table head-->
                     <!--begin::Table body-->
                     <tbody class="fw-semibold text-gray-600">
-                        @foreach ($brands as $brand)
-                        <!--begin::Table row-->
+                        @foreach($customers as $customer)
                         <tr>
                             <!--begin::Checkbox-->
                             <td>
                                 <div class="form-check form-check-sm form-check-custom form-check-solid">
-                                    <input class="form-check-input" type="checkbox" value="{{$brand->id}}" name="brand_ids[]" />
+                                    <input class="form-check-input" type="checkbox" value="{{ $customer->id }}" name="customer_ids[]" />
                                 </div>
                             </td>
                             <!--end::Checkbox-->
-                            <!--begin::Brand=-->
+                            <!--begin::Name=-->
                             <td>
-                                <div class="d-flex">
-                                    <!--begin::Thumbnail-->
-                                    <a href="{{ route('brand.show', encrypt($brand->id)) }}" class="symbol symbol-50px">
-                                        <span class="symbol-label" style="background-image:url({{ asset('brands/logos') . '/' . $brand->logo }});"></span>
-                                    </a>
-                                    <!--end::Thumbnail-->
-                                    <div class="ms-5">
-                                        <!--begin::Title-->
-                                        <a href="{{ route('brand.show', encrypt($brand->id)) }}" class="text-gray-800 text-hover-primary fs-5 fw-bold mb-1" data-kt-ecommerce-Brand-filter="Brand_name"> {{ $brand->name }} </a>
-                                        <!--end::Title-->
-                                        <!--begin::Description-->
-                                        <div class="text-muted fs-7 fw-bold"> {{ $brand->description }}.</div>
-                                        <!--end::Description-->
-                                    </div>
-                                </div>
+                                <a href="javascript:void(0)" class="text-gray-800 text-hover-primary mb-1"> {{$customer->name}} </a>
                             </td>
-                            <!--end::Brand=-->
-                            <!--begin::Website=-->
+                            <!--end::Name=-->
+                            <!--begin::Email=-->
                             <td>
-                                <!--begin::Badges-->
-                                <div class="badge badge-light-success">
-                                    <a href="{{ $brand->url }}"> {{ $brand->url }} </a>
-                                </div>
-                                <!--end::Badges-->
+                                <a href="#" class="text-gray-600 text-hover-primary mb-1"> {{$customer->email}} </a>
                             </td>
-                            <!--end::Website=-->
+                            <!--end::Email=-->
+                            <!--begin::contact=-->
+                            <td>
+                                <a href="#" class="text-gray-600 text-hover-primary mb-1"> {{$customer->contact_no}} </a>
+                            </td>
+                            <!--end::contact=-->
                             <!--begin::Status=-->
                             <td>
-                                <!--begin::Badges-->
                                 @php
                                 $status = null;
                                 $class = null;
-                                switch ($brand->status) {
-                                case '0':
-                                $status = 'Unpublished';
-                                $class = 'badge badge-light-danger';
-                                break;
-                                case '1':
-                                $status = 'Published';
-                                $class = 'badge badge-light-success';
-                                break;
-                                case '2':
-                                $status = 'Scheduled';
-                                $class = 'badge badge-light-warning';
-                                break;
-                                default:
-                                $status = 'Unknown';
-                                $class = 'badge badge-light-secondary';
-                                break;
+                                if($customer->status == 1){
+                                $status='Active';
+                                $class ='badge badge-light-success';
+                                }else{
+                                $status='Inactive';
+                                $class ="badge badge-light-danger";
                                 }
                                 @endphp
-                                <div class="{{ $class }}">{{ $status }}</div>
+                                <!--begin::Badges-->
+                                <div class="{{$class}}"> {{$status}} </div>
                                 <!--end::Badges-->
                             </td>
                             <!--end::Status=-->
+                            <!--begin::Date=-->
+                            <td>{{$customer->created_at}}</td>
+                            <!--end::Date=-->
                             <!--begin::Action=-->
                             <td class="text-end">
-                                <a href="javascript:void(0)" class="btn btn-sm btn-light btn-active-light-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Actions
+                                <a href="#" class="btn btn-sm btn-light btn-active-light-primary" data-kt-menu-trigger="click" data-kt-menu-placement="bottom-end">Actions
                                     <!--begin::Svg Icon | path: icons/duotune/arrows/arr072.svg-->
                                     <span class="svg-icon svg-icon-5 m-0">
                                         <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -147,15 +144,15 @@
                                 <div class="menu menu-sub menu-sub-dropdown menu-column menu-rounded menu-gray-600 menu-state-bg-light-primary fw-semibold fs-7 w-125px py-4" data-kt-menu="true">
                                     <!--begin::Menu item-->
                                     <div class="menu-item px-3">
-                                        <a href=" {{ route('brand.edit', encrypt($brand->id)) }}" class="menu-link px-3">Edit</a>
+                                        <a href="{{route('customer.edit', encrypt($customer->id))}}" class="menu-link px-3">Edit</a>
                                     </div>
                                     <!--end::Menu item-->
                                     <!--begin::Menu item-->
                                     <div class="menu-item px-3">
-                                        <form method="post" action="{{ route('brand.destroy', encrypt($brand->id)) }}">
+                                        <form method="post" action="{{ route('customer.destroy', encrypt($customer->id)) }}">
                                             @csrf
                                             @method('delete')
-                                            <button class="menu-link px-3 btn btn-outline-danger">
+                                            <button class="menu-link px-3 btn btn-outline-danger " type="submit">
                                                 Delete </button>
                                         </form>
                                     </div>
@@ -165,18 +162,16 @@
                             </td>
                             <!--end::Action=-->
                         </tr>
-                        <!--end::Table row-->
                         @endforeach
                     </tbody>
                     <!--end::Table body-->
                 </table>
                 <!--end::Table-->
-                {{ $brands->links() }}
                 @endif
             </div>
             <!--end::Card body-->
         </div>
-        <!--end::Brand-->
+        <!--end::Card-->
     </form>
 </div>
 <!--end::Content container-->

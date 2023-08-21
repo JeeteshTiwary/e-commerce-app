@@ -34,9 +34,9 @@ class UpdateProductRequest extends FormRequest
             'sale_price' => 'required|numeric|min:0.01',
             'quantity_on_shelf' => 'required|integer|min:0',
             'quantity_in_warehouse' => 'required|integer|min:0',
-            'kt_ecommerce_add_product_options' => 'required|array',
-            'kt_ecommerce_add_product_options.variation_name.*' => 'required|string',
-            'kt_ecommerce_add_product_options.variation_value.*' => 'required|string',
+            'kt_ecommerce_add_product_options' => 'array',
+            'variations.*.variation_id' => 'required|numeric|exists:variations,id',
+            'variations.*.variation_value' => 'required|string|max:255',
         ];
     }
 
