@@ -6,7 +6,22 @@ use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
-    public function verifyAdmin(){
-        return view('index');
+    // call to admin home page
+    public function home(){
+        return view('admin.layouts.home');
     }
+    
+    public function dashboard(Request $request){
+        $user = auth()->user();
+        return view('profile.edit',[
+            'user' => $request->user(),
+        ]);
+    }
+    public function editProfile(Request $request){
+        $user = auth()->user();
+        return view('profile.edit',[
+            'user' => $request->user(),
+        ]);
+    }
+    
 }

@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('product_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->integer('total');
             $table->timestamp('order_date');
-            $table->tinyInteger('status')->comment('0-pending, 1-accepted, 2-dispatched, 3-delivered');
+            $table->tinyInteger('status')->comment('0-pending, 1-accepted, 2-dispatched, 3-delivered')->default('0');
             $table->timestamps();
         });
     }

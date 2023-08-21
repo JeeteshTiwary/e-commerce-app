@@ -48,7 +48,7 @@ var KTModalUserSearch = function () {
     return {
         init: function () {
             // Elements
-            element = document.querySelector('#kt_modal_users_search_handler');
+            element = document.querySelector('.form-control form-control-solid w-250px ps-14');
 
             if (!element) {
                 return;
