@@ -67,8 +67,9 @@ class CustomerController extends Controller
             $customer = User::findOrFail($id);
             if ($customer) {
                 $validated = $request->validated();
-                $validated['updated_at'] = now();
-                $customer->fill($validated)->save();
+                $data =  $customer->update($validated);
+                // dd($data);
+                
                 return redirect()->route('customer.index')->with('success', 'Customer details updated successfully.');
             }
 

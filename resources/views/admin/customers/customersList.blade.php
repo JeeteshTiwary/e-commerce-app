@@ -2,7 +2,6 @@
 @section('title', 'Customers List')
 @section('content')
 <!--begin::Content container-->
-{{-- @dd($customers) --}}
 <div id="kt_app_content_container" class="app-container container-xxl">
     <form action="{{ route('customer.multiple-delete') }}" method="POST">
         @csrf

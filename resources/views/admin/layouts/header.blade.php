@@ -299,26 +299,6 @@
                                     <!--end::Menu separator-->
                                     <!--begin::Menu item-->
                                     <div class="menu-item px-5">
-                                        <a href="{{ route('admin.profile') }}" class="menu-link px-5">My Profile</a>
-                                    </div>
-                                    <!--end::Menu item-->
-                                    <!--begin::Menu item-->
-                                    <div class="menu-item px-5">
-                                        <a href="admin/dist/account/statements.html" class="menu-link px-5">My
-                                            Statements</a>
-                                    </div>
-                                    <!--end::Menu item-->
-                                    <!--begin::Menu separator-->
-                                    <div class="separator my-2"></div>
-                                    <!--end::Menu separator-->
-                                    <!--begin::Menu item-->
-                                    <div class="menu-item px-5 my-1">
-                                        <a href="admin/dist/account/settings.html" class="menu-link px-5">Account
-                                            Settings</a>
-                                    </div>
-                                    <!--end::Menu item-->
-                                    <!--begin::Menu item-->
-                                    <div class="menu-item px-5">
                                         <form method="POST" action="{{ route('logout') }}">
                                             @csrf
                                             <x-responsive-nav-link :href="route('logout')" onclick="event.preventDefault();

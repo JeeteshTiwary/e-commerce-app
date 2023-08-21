@@ -25,21 +25,12 @@
                     <!--begin::Image input placeholder-->
                     <style>
                         .image-input-placeholder {
-                            background-image: url({{ asset('admin/dist/assets/media/svg/files/blank-image.svg')
-                        }
-                        }
-
-                        );
+                            background-image: url({{ asset('admin/dist/assets/media/svg/files/blank-image.svg') }} );
                         }
 
                         [data-bs-theme="dark"] .image-input-placeholder {
-                            background-image: url({{ asset('admin/dist/assets/media/svg/files/blank-image-dark.svg')
+                            background-image: url({{ asset('admin/dist/assets/media/svg/files/blank-image-dark.svg') }} );
                         }
-                        }
-
-                        );
-                        }
-
                     </style>
                     <!--end::Image input placeholder-->
                     <!--begin::Image input-->

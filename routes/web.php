@@ -35,11 +35,11 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
-    Route::resource('brand', BrandController::class);
-    Route::resource('product', ProductController::class);
-    Route::resource('category', CategoryController::class);
-    Route::resource('customer', CustomerController::class);
-    Route::resource('order', OrderController::class);
+    Route::resource('/admin/brand', BrandController::class);
+    Route::resource('/admin/product', ProductController::class);
+    Route::resource('/admin/category', CategoryController::class);
+    Route::resource('/admin/customer', CustomerController::class);
+    Route::resource('/admin/order', OrderController::class);
 
     Route::delete('/delete-selected-categories', [CategoryController::class, 'deleteMultipleCategories'])->name('category.multiple-delete');
     Route::delete('/delete-selected-brands', [BrandController::class, 'deleteMultipleBrands'])->name('brand.multiple-delete');
@@ -52,9 +52,9 @@ require __DIR__ . '/auth.php';
 Route::get('/verifyuser', [VerifyUserController::class, 'verifyuser'])->middleware(['auth', 'verified'])->name('verifyuser');
 
 Route::controller(AdminController::class)->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/home', 'home')->name('home');
-    Route::get('/dashboard', 'dashboard')->name('dashboard');
-    Route::get('/profile', 'editProfile')->name('profile');
+    Route::get('/admin/home', 'home')->name('home');
+    Route::get('/admin/dashboard', 'dashboard')->name('dashboard');
+    Route::get('/admin/profile', 'editProfile')->name('profile');
 })->middleware(['auth', 'verified']);
 
 Route::controller(UserController::class)->name('user.')->group(function () {
