@@ -9,25 +9,25 @@
 
         <div class="mb-3">
             <label for="name" class="form-label">Name</label>
-            <input type="text" class="form-control" id="name" name="name" value="{{ $customer->name }}" required>
+            <input type="text" class="form-control" id="name" name="name" value="{{ $customer->name }}" readonly required>
             <span class="text-danger"> {{ $errors->first('name') }} </span>
         </div>
 
         <div class="mb-3">
             <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" name="email" value="{{ $customer->email }}" required>
+            <input type="email" class="form-control" id="email" name="email" value="{{ $customer->email }}" readonly required>
             <span class="text-danger"> {{ $errors->first('email') }} </span>
         </div>
 
         <div class="mb-3">
             <label for="contact_no" class="form-label">Contact Number</label>
-            <input type="text" class="form-control" id="contact_no" name="contact_no" value="{{ $customer->contact_no }}" required>
+            <input type="text" class="form-control" id="contact_no" name="contact_no" value="{{ $customer->contact_no }}" readonly required>
             <span class="text-danger"> {{ $errors->first('contact_no') }} </span>
         </div>
 
         <div class="mb-3">
             <label for="address" class="form-label">Address</label>
-            <textarea class="form-control" id="address" name="address" rows="3">{{ $customer->address }}</textarea>
+            <textarea class="form-control" id="address" name="address" rows="3" readonly>{{ $customer->address }}</textarea>
             <span class="text-danger"> {{ $errors->first('address') }} </span>
         </div>
 

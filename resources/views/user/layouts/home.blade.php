@@ -1,187 +1,27 @@
-<!DOCTYPE html>
-<html lang="zxx">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="description" content="Ashion Template">
-    <meta name="keywords" content="Ashion, unica, creative, html">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>E-Commerce-App | Jmt</title>
-
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Cookie&display=swap" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap"
-        rel="stylesheet">
-
-    <!-- Css Styles -->
-    <link rel="stylesheet" href="{{ asset('user/css/bootstrap.min.css') }}" type="text/css">
-    <link rel="stylesheet" href="{{ asset('user/css/font-awesome.min.css') }}" type="text/css">
-    <link rel="stylesheet" href="{{ asset('user/css/elegant-icons.css') }}" type="text/css">
-    <link rel="stylesheet" href="{{ asset('user/css/jquery-ui.min.css') }}" type="text/css">
-    <link rel="stylesheet" href="{{ asset('user/css/magnific-popup.css') }}" type="text/css">
-    <link rel="stylesheet" href="{{ asset('user/css/owl.carousel.min.css') }}" type="text/css">
-    <link rel="stylesheet" href="{{ asset('user/css/slicknav.min.css') }}" type="text/css">
-    <link rel="stylesheet" href="{{ asset('user/css/style.css') }}" type="text/css">
-</head>
-
-<body>
-    <!-- Page Preloder -->
-    <div id="preloder">
-        <div class="loader"></div>
-    </div>
-
-    <!-- Offcanvas Menu Begin -->
-    <div class="offcanvas-menu-overlay"></div>
-    <div class="offcanvas-menu-wrapper">
-        <div class="offcanvas__close">+</div>
-        <ul class="offcanvas__widget">
-            <li><span class="icon_search search-switch"></span></li>
-            <li><a href="#"><span class="icon_heart_alt"></span>
-                    <div class="tip">2</div>
-                </a></li>
-            <li><a href="#"><span class="icon_bag_alt"></span>
-                    <div class="tip">2</div>
-                </a></li>
-        </ul>
-        <div class="offcanvas__logo">
-            <a href="./index.html"><img src="{{ asset('img/logo.png') }}" alt=""></a>
-        </div>
-        <div id="mobile-menu-wrap"></div>
-        <div class="offcanvas__auth">
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <x-responsive-nav-link :href="route('logout')"
-                    onclick="event.preventDefault();
-                        this.closest('form').submit();">
-                    <span class="menu-link px-5">Sign Out</span>
-                </x-responsive-nav-link>
-            </form>
-        </div>
-    </div>
-    <!-- Offcanvas Menu End -->
-
-    <!-- Header Section Begin -->
-    <header class="header">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-xl-3 col-lg-2">
-                    <div class="header__logo">
-                        <a href="./index.html"><img src="{{ asset('user/img/logo.png') }}" alt=""></a>
-                    </div>
-                </div>
-                <div class="col-xl-6 col-lg-7">
-                    <nav class="header__menu">
-                        <ul>
-                            <li class="active"><a href="{{ route('user.home') }}">Home</a></li>
-                            <li><a href="#">category</a>
-                                <ul class="dropdown">
-                                    <li><a href="./product-details.html">Product Details</a></li>
-                                    <li><a href="./shop-cart.html">Shop Cart</a></li>
-                                    <li><a href="./checkout.html">Checkout</a></li>
-                                    <li><a href="./blog-details.html">Blog Details</a></li>
-                                </ul>
-                            </li>
-                            @foreach ($categories as $category)
-                                <li><a href="#"> {{ $category->name }}’s</a></li>
-                            @endforeach
-                            <li><a href="./shop.html">Shop</a></li>
-                            <li><a href="#">Pages</a>
-                                <ul class="dropdown">
-                                    <li><a href="./product-details.html">Product Details</a></li>
-                                    <li><a href="./shop-cart.html">Shop Cart</a></li>
-                                    <li><a href="./checkout.html">Checkout</a></li>
-                                    <li><a href="./blog-details.html">Blog Details</a></li>
-                                </ul>
-                            </li>
-                            <li><a href="./blog.html">Blog</a></li>
-                            <li><a href="./contact.html">Contact</a></li>
-                        </ul>
-                    </nav>
-                </div>
-                <div class="col-lg-3">
-                    <div class="header__right">
-                        <ul class="header__right__widget">
-                            <li><span class="icon_search search-switch"></span></li>
-                            <li><a href="#"><span class="icon_heart_alt"></span>
-                                    <div class="tip">2</div>
-                                </a></li>
-                            <li><a href="#"><span class="icon_bag_alt"></span>
-                                    <div class="tip">2</div>
-                                </a></li>
-                        </ul>
-                        @if (auth()->user())
-                            <a href="javascript:void(0)"> {{ auth()->user()->name }} </a>
-                            <div class="header__right__auth">
-                                <form method="POST" action="{{ route('logout') }}">
-                                    @csrf
-                                    <x-responsive-nav-link :href="route('logout')"
-                                        onclick="event.preventDefault();
-                                            this.closest('form').submit();">
-                                        <span class="menu-link px-5">Sign Out</span>
-                                    </x-responsive-nav-link>
-                                </form>
-                            </div>
-                        @endif
-                    </div>
-                </div>
-            </div>
-            <div class="canvas__open">
-                <i class="fa fa-bars"></i>
-            </div>
-        </div>
-    </header>
-    <!-- Header Section End -->
-
+@include('user.layouts.header')
     <!-- Categories Section Begin -->
     <section class="categories">
         <div class="container-fluid">
             <div class="row">
+                @foreach ($categories as $category)                    
                 <div class="col-lg-6 p-0">
                     <div class="categories__item categories__large__item set-bg"
-                        data-setbg="img/categories/category-1.jpg">
+                        data-setbg="{{ asset('categories/thumbnails') . '/' . $category->thumbnail }}">
                         <div class="categories__text">
-                            <h1>Women’s fashion</h1>
-                            <p>Sitamet, consectetur adipiscing elit, sed do eiusmod tempor incidid-unt labore
-                                edolore magna aliquapendisse ultrices gravida.</p>
+                            <h1>{{ $category->name }}</h1>
+                            <p>{{ $category->description }}.</p>
                             <a href="#">Shop now</a>
                         </div>
                     </div>
                 </div>
+                @endforeach
                 <div class="col-lg-6">
+                    @foreach ($subCategories as $subCategory)
                     <div class="row">
                         <div class="col-lg-6 col-md-6 col-sm-6 p-0">
                             <div class="categories__item set-bg" data-setbg="img/categories/category-2.jpg">
                                 <div class="categories__text">
-                                    <h4>Men’s fashion</h4>
-                                    <p>358 items</p>
-                                    <a href="#">Shop now</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 p-0">
-                            <div class="categories__item set-bg" data-setbg="img/categories/category-3.jpg">
-                                <div class="categories__text">
-                                    <h4>Kid’s fashion</h4>
-                                    <p>273 items</p>
-                                    <a href="#">Shop now</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 p-0">
-                            <div class="categories__item set-bg" data-setbg="img/categories/category-4.jpg">
-                                <div class="categories__text">
-                                    <h4>Cosmetics</h4>
-                                    <p>159 items</p>
-                                    <a href="#">Shop now</a>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-lg-6 col-md-6 col-sm-6 p-0">
-                            <div class="categories__item set-bg" data-setbg="img/categories/category-5.jpg">
-                                <div class="categories__text">
-                                    <h4>Accessories</h4>
-                                    <p>792 items</p>
+                                    <h4>{{ $subCategory->name }}</h4>                                    
                                     <a href="#">Shop now</a>
                                 </div>
                             </div>
@@ -189,6 +29,7 @@
                     </div>
                 </div>
             </div>
+            @endforeach
         </div>
     </section>
     <!-- Categories Section End -->
@@ -694,168 +535,4 @@
     </section>
     <!-- Services Section End -->
 
-    <!-- Instagram Begin -->
-    <div class="instagram">
-        <div class="container-fluid">
-            <div class="row">
-                <div class="col-lg-2 col-md-4 col-sm-4 p-0">
-                    <div class="instagram__item set-bg" data-setbg="img/instagram/insta-1.jpg">
-                        <div class="instagram__text">
-                            <i class="fa fa-instagram"></i>
-                            <a href="#">@ ashion_shop</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-4 col-sm-4 p-0">
-                    <div class="instagram__item set-bg" data-setbg="img/instagram/insta-2.jpg">
-                        <div class="instagram__text">
-                            <i class="fa fa-instagram"></i>
-                            <a href="#">@ ashion_shop</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-4 col-sm-4 p-0">
-                    <div class="instagram__item set-bg" data-setbg="img/instagram/insta-3.jpg">
-                        <div class="instagram__text">
-                            <i class="fa fa-instagram"></i>
-                            <a href="#">@ ashion_shop</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-4 col-sm-4 p-0">
-                    <div class="instagram__item set-bg" data-setbg="img/instagram/insta-4.jpg">
-                        <div class="instagram__text">
-                            <i class="fa fa-instagram"></i>
-                            <a href="#">@ ashion_shop</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-4 col-sm-4 p-0">
-                    <div class="instagram__item set-bg" data-setbg="img/instagram/insta-5.jpg">
-                        <div class="instagram__text">
-                            <i class="fa fa-instagram"></i>
-                            <a href="#">@ ashion_shop</a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-4 col-sm-4 p-0">
-                    <div class="instagram__item set-bg" data-setbg="img/instagram/insta-6.jpg">
-                        <div class="instagram__text">
-                            <i class="fa fa-instagram"></i>
-                            <a href="#">@ ashion_shop</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- Instagram End -->
-
-    <!-- Footer Section Begin -->
-    <footer class="footer">
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-4 col-md-6 col-sm-7">
-                    <div class="footer__about">
-                        <div class="footer__logo">
-                            <a href="./index.html"><img src="{{ asset('user/img/logo.png') }}" alt=""></a>
-                        </div>
-                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt
-                            cilisis.</p>
-                        <div class="footer__payment">
-                            <a href="#"><img
-                                    src="{{ asset('user/img/payment/payment-1.png') }}"alt=""></a>
-                            <a href="#"><img src="{{ asset('user/img/payment/payment-2.png') }}"
-                                    alt=""></a>
-                            <a href="#"><img src="{{ asset('user/img/payment/payment-3.png') }}"
-                                    alt=""></a>
-                            <a href="#"><img src="{{ asset('user/img/payment/payment-4.png') }}"
-                                    alt=""></a>
-                            <a href="#"><img src="{{ asset('user/img/payment/payment-5.png') }}"
-                                    alt=""></a>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-3 col-sm-5">
-                    <div class="footer__widget">
-                        <h6>Quick links</h6>
-                        <ul>
-                            <li><a href="#">About</a></li>
-                            <li><a href="#">Blogs</a></li>
-                            <li><a href="#">Contact</a></li>
-                            <li><a href="#">FAQ</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-2 col-md-3 col-sm-4">
-                    <div class="footer__widget">
-                        <h6>Account</h6>
-                        <ul>
-                            <li><a href="#">My Account</a></li>
-                            <li><a href="#">Orders Tracking</a></li>
-                            <li><a href="#">Checkout</a></li>
-                            <li><a href="#">Wishlist</a></li>
-                        </ul>
-                    </div>
-                </div>
-                <div class="col-lg-4 col-md-8 col-sm-8">
-                    <div class="footer__newslatter">
-                        <h6>NEWSLETTER</h6>
-                        <form action="#">
-                            <input type="text" placeholder="Email">
-                            <button type="submit" class="site-btn">Subscribe</button>
-                        </form>
-                        <div class="footer__social">
-                            <a href="#"><i class="fa fa-facebook"></i></a>
-                            <a href="#"><i class="fa fa-twitter"></i></a>
-                            <a href="#"><i class="fa fa-youtube-play"></i></a>
-                            <a href="#"><i class="fa fa-instagram"></i></a>
-                            <a href="#"><i class="fa fa-pinterest"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-12">
-                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                    <div class="footer__copyright__text">
-                        <p>Copyright &copy;
-                            <script>
-                                document.write(new Date().getFullYear());
-                            </script> All rights reserved | This template is made with <i
-                                class="fa fa-heart" aria-hidden="true"></i> by <a href="https://colorlib.com"
-                                target="_blank">Colorlib</a>
-                        </p>
-                    </div>
-                    <!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
-                </div>
-            </div>
-        </div>
-    </footer>
-    <!-- Footer Section End -->
-
-    <!-- Search Begin -->
-    <div class="search-model">
-        <div class="h-100 d-flex align-items-center justify-content-center">
-            <div class="search-close-switch">+</div>
-            <form class="search-model-form">
-                <input type="text" id="search-input" placeholder="Search here.....">
-            </form>
-        </div>
-    </div>
-    <!-- Search End -->
-
-    <!-- Js Plugins -->
-    <script src="{{ asset('user/js/jquery-3.3.1.min.js') }}"></script>
-    <script src="{{ asset('user/js/bootstrap.min.js') }}"></script>
-    <script src="{{ asset('user/js/jquery.magnific-popup.min.js') }}"></script>
-    <script src="{{ asset('user/js/jquery-ui.min.js') }}"></script>
-    <script src="{{ asset('user/js/mixitup.min.js') }}"></script>
-    <script src="{{ asset('user/js/jquery.countdown.min.js') }}"></script>
-    <script src="{{ asset('user/js/jquery.slicknav.js') }}"></script>
-    <script src="{{ asset('user/js/owl.carousel.min.js') }}"></script>
-    <script src="{{ asset('user/js/jquery.nicescroll.min.js') }}"></script>
-    <script src="{{ asset('user/js/main.js') }}"></script>
-</body>
-
-</html>
+    @include('user.layouts.footer')
