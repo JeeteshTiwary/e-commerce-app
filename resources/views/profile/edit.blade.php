@@ -1,10 +1,4 @@
-@if (Auth::user()->role_id == 1)
-@extends('admin.layouts.home')
-{{-- @dd('extending admin') --}}
-@else
 @extends('user.layouts.home')
-{{-- @dd('extending user') --}}
-@endif
 
 @section('title', 'profile')
 
