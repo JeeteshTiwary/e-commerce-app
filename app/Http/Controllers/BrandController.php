@@ -167,7 +167,7 @@ class BrandController extends Controller
         try {
             $ids = $request->brand_ids;
             if (!$ids) {
-                return redirect()->back()->with("error", 'No brand has been seleted to delete!!');
+                return redirect()->back()->with("message", 'No brand has been seleted to delete!!');
             }
             Brand::whereIn('id', $ids)->delete();
             return redirect()->back()->with("success", ' Selected brands has been deleted successfully!!');

@@ -244,7 +244,7 @@ class ProductController extends Controller
         try {
             $ids = $request->product_ids;
             if (!$ids) {
-                return redirect()->back()->with("error", 'No product has been seleted to delete!!');
+                return redirect()->back()->with("message", 'No product has been seleted to delete!!');
             }
             foreach ($ids as $productId) {
                 $product = Product::find($productId);

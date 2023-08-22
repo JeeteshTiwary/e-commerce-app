@@ -169,7 +169,7 @@ class CategoryController extends Controller
         try {
             $ids = $request->category_ids;
             if (!$ids) {
-                return redirect()->back()->with("error", 'No category has been seleted to delete!!');
+                return redirect()->back()->with("message", 'No category has been seleted to delete!!');
             }
             Category::whereIn('id', $ids)->delete();
             return redirect()->back()->with("success", ' Selected categories has been deleted successfully!!');

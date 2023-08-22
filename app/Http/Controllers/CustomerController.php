@@ -105,7 +105,7 @@ class CustomerController extends Controller
         try {
             $ids = $request->customer_ids;
             if (!$ids) {
-                return redirect()->back()->with("error", 'No customer has been seleted to delete!!');
+                return redirect()->back()->with("message", 'No customer has been seleted to delete!!');
             }
             User::whereIn('id', $ids)->delete();
             return redirect()->back()->with("success", ' Selected customers records has been deleted successfully!!');
