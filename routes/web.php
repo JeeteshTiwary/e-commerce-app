@@ -52,9 +52,9 @@ require __DIR__ . '/auth.php';
 Route::get('/verifyuser', [VerifyUserController::class, 'verifyuser'])->middleware(['auth', 'verified'])->name('verifyuser');
 
 Route::controller(AdminController::class)->prefix('admin')->name('admin.')->group(function () {
-    Route::get('/admin/home', 'home')->name('home');
-    Route::get('/admin/dashboard', 'dashboard')->name('dashboard');
-    Route::get('/admin/profile', 'editProfile')->name('profile');
+    Route::get('/home', 'home')->name('home');
+    Route::get('/dashboard', 'dashboard')->name('dashboard');
+    Route::get('/profile', 'editProfile')->name('profile');
 })->middleware(['auth', 'verified']);
 
 Route::controller(UserController::class)->name('user.')->group(function () {

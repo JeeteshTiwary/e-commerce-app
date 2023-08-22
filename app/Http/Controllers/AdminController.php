@@ -12,10 +12,7 @@ class AdminController extends Controller
     }
     
     public function dashboard(Request $request){
-        $user = auth()->user();
-        return view('profile.edit',[
-            'user' => $request->user(),
-        ]);
+        return view('admin.layouts.home');
     }
     public function editProfile(Request $request){
         $user = auth()->user();

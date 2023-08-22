@@ -16,7 +16,7 @@
             <!--begin::Content-->
             <div id="kt_app_content" class="app-content flex-column-fluid">
                 @if (Auth::user()->role_id == 1)
-                @if (url()->full() == 'http://127.0.0.1:8000/admin/home')
+                @if (url()->full() == 'http://127.0.0.1:8000/admin/home' || url()->full() == 'http://127.0.0.1:8000/admin/dashboard')
                 <div class="m-5 align-items-center">
                     {{ 'Hello '.auth()->user()->name .', Welcome on E-Commerce App' }}
                 </div>

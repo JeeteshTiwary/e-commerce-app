@@ -1,8 +1,8 @@
-@if (Auth::user()->role_id == 2)
+@if (Auth::user()->role_id == 1)
 @extends('admin.layouts.home')
 {{-- @dd('extending admin') --}}
 @else
-@extends('user.home')
+@extends('user.layouts.home')
 {{-- @dd('extending user') --}}
 @endif
 
