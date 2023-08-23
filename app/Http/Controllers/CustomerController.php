@@ -67,9 +67,8 @@ class CustomerController extends Controller
             $customer = User::findOrFail($id);
             if ($customer) {
                 $validated = $request->validated();
-                $data =  $customer->update($validated);
-                // dd($data);
-                
+                $customer->update($validated);
+
                 return redirect()->route('customer.index')->with('success', 'Customer details updated successfully.');
             }
 
@@ -93,10 +92,10 @@ class CustomerController extends Controller
                 if ($delete) {
                     return redirect()->back()->with("success", $customer->name . ' has been deleted successfully!!');
                 }
-                return redirect()->back()->with("error", 'Something went Wrong!!');
             }
-        } catch (\Throwable $th) {
             return redirect()->back()->with("error", 'Requested customer doesn\'t exit!!');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with("error", 'Something went Wrong!!');
         }
     }
 

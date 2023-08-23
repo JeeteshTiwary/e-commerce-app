@@ -147,17 +147,17 @@ class CategoryController extends Controller
             $category = Category::findOrfail($id);
             if ($category) {
                 $path = public_path('categories/thumbnails');
-                if (file_exists(file_exists($path . '/' . $category->thumbnail))) {
+                if (file_exists($path . '/' . $category->thumbnail)) {
                     unlink($path . '/' . $category->thumbnail);
                 }
                 $delete = $category->delete();
                 if ($delete) {
                     return redirect()->back()->with("success", $category->name . ' category has been deleted successfully!!');
                 }
-                return redirect()->back()->with("error", 'Something went Wrong!!');
             }
-        } catch (\Throwable $th) {
             return redirect()->back()->with("error", 'Requested category doesn\'t exit!!');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with("error", 'Something went Wrong!!');
         }
     }
 
@@ -167,14 +167,32 @@ class CategoryController extends Controller
     public function deleteMultipleCategories(Request $request)
     {
         try {
+            $delete = null;
             $ids = $request->category_ids;
+
             if (!$ids) {
                 return redirect()->back()->with("message", 'No category has been seleted to delete!!');
             }
-            Category::whereIn('id', $ids)->delete();
-            return redirect()->back()->with("success", ' Selected categories has been deleted successfully!!');
-        } catch (\Throwable $th) {
+
+            foreach ($ids as $categoryId) {
+                $category = Category::find($categoryId);
+                if ($category) {
+
+                    $path = public_path('categories/thumbnails');
+                    if (file_exists($path . '/' . $category->thumbnail)) {
+                        unlink($path . '/' . $category->thumbnail);
+                    }
+
+                    $delete = $category->delete();
+                }
+            }
+
+            if ($delete) {
+                return redirect()->back()->with("success", ' Selected categories has been deleted successfully!!');
+            }
             return redirect()->back()->with("error", 'Requested category doesn\'t exit!!');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with("error", ' Some error occured in category deletion.');
         }
     }
 

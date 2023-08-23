@@ -228,10 +228,10 @@ class ProductController extends Controller
                 if ($delete) {
                     return redirect()->back()->with("success", $product->name . ' has been deleted successfully!!');
                 }
-                return redirect()->back()->with("error", 'Some error occured while deleting the product!!');
             }
-        } catch (\Throwable $th) {
             return redirect()->back()->with("error", 'Requested Product doesn\'t exit!!');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with("error", 'Some error occured while deleting the product!!');
         }
     }
 
@@ -246,11 +246,17 @@ class ProductController extends Controller
             if (!$ids) {
                 return redirect()->back()->with("message", 'No product has been seleted to delete!!');
             }
+
             foreach ($ids as $productId) {
                 $product = Product::find($productId);
                 if ($product) {
+
+                    $path = public_path('products/thumbnails');
+                    if (file_exists($path . '/' . $product->productDetails->thumbnail)) {
+                        unlink($path . '/' . $product->productDetails->thumbnail);
+                    }
+
                     $product->productDetails->delete();
-                    // dd($product);
                     $product->brand()->detach();
                     $product->category()->detach();
                     $product->tags()->detach();
@@ -259,12 +265,12 @@ class ProductController extends Controller
                 }
             }
 
-            // Category::whereIn('id', $ids)->delete();
             if ($delete) {
                 return redirect()->back()->with("success", ' Selected products has been deleted successfully!!');
             }
-        } catch (\Throwable $th) {
             return redirect()->back()->with("error", 'Requested product doesn\'t exit!!');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with("error", 'Some error occured.');
         }
     }
 

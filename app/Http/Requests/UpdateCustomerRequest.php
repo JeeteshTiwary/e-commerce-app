@@ -22,18 +22,7 @@ class UpdateCustomerRequest extends FormRequest
      */
     public function rules(): array
     {
-        $customerId = $this->route('customer');
-        $id = decrypt($customerId);
         return [
-            'name' => 'required|string|max:191',
-            'email' => [
-                'required',
-                'email',
-                'max:191',
-                Rule::unique('users', 'email')->ignore($id),
-            ],
-            'contact_no' => 'required|string|max:16',
-            'address' => 'nullable|string|max:252',
             'status' => 'required|numeric',
         ];
     }

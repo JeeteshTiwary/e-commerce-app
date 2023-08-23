@@ -44,16 +44,19 @@ class BrandController extends Controller
                 $uplaod = $file->move($path, $fileName);
                 $validated['logo'] = $fileName;
             }
-            $categories = $validated['categories'];
 
             $brand = Brand::create($validated);
 
-            $brand->categories()->attach($categories, ['created_at' => now(), 'updated_at' => now()]);
+            $brand->categories()->attach($validated['categories'], ['created_at' => now(), 'updated_at' => now()]);
 
             if ($brand) {
-                $request->session()->flash('Success', $validated['name'] . ' brand has been added successfully!');
+                $request->session()->flash('success', $brand['name'] . ' brand has been added successfully!');
+                return redirect()->route('brand.index');
+            } else {
+                $request->session()->flash("error", 'some error occured in brand creation.');
                 return redirect()->route('brand.index');
             }
+
         } catch (\Throwable $th) {
             //throw $th;
             $request->session()->flash("error", 'something went wrong!!');
@@ -147,7 +150,7 @@ class BrandController extends Controller
             $brand = Brand::findOrfail($id);
             if ($brand) {
                 $path = public_path('brands/logos');
-                if (file_exists(file_exists($path . '/' . $brand->logo))) {
+                if (file_exists($path . '/' . $brand->logo)) {
                     unlink($path . '/' . $brand->logo);
                 }
                 $brand->categories()->detach();
@@ -155,22 +158,41 @@ class BrandController extends Controller
                 if ($delete) {
                     return redirect()->back()->with("success", $brand->name . ' has been deleted successfully!!');
                 }
-                return redirect()->back()->with("error", 'some error occured during delete!!');
             }
-        } catch (\Throwable $th) {
             return redirect()->back()->with("error", 'Requested Brand doesn\'t exit!!');
+        } catch (\Throwable $th) {
+            return redirect()->back()->with("error", 'some error occured during delete!!');
         }
     }
 
     public function deleteMultipleBrands(Request $request)
     {
         try {
+            $delete = null;
             $ids = $request->brand_ids;
             if (!$ids) {
                 return redirect()->back()->with("message", 'No brand has been seleted to delete!!');
             }
-            Brand::whereIn('id', $ids)->delete();
-            return redirect()->back()->with("success", ' Selected brands has been deleted successfully!!');
+
+            foreach ($ids as $brandId) {
+                $brand = Brand::find($brandId);
+                if ($brand) {
+
+                    $path = public_path('brands/logos');
+                    if (file_exists($path . '/' . $brand->logo)) {
+                        unlink($path . '/' . $brand->logo);
+                    }
+
+                    $brand->categories()->detach();
+                    $delete = $brand->delete();
+                }
+            }
+
+            if ($delete) {
+                return redirect()->back()->with("success", ' Selected brands has been deleted successfully!!');
+            }
+            return redirect()->back()->with("error", 'some error occured during delete!!');
+
         } catch (\Throwable $th) {
             return redirect()->back()->with("error", 'Requested brand doesn\'t exit!!');
         }
