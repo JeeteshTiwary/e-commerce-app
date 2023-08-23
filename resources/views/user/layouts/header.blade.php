@@ -81,9 +81,9 @@
                             @foreach ($categories as $category)
                                 <li><a href="#"> {{ $category->name }} </a></li>
                             @endforeach
-                            <li><a href="./shop.html">Shop</a></li>
-                            <li><a href="./shop.html">Cart</a></li>                            
-                            <li><a href="./contact.html">Contact</a></li>
+                            <li><a href="/user/shop.html">Shop</a></li>
+                            <li><a href="/user/shop.html">Cart</a></li>
+                            <li><a href="/user/contact.html">Contact</a></li>
                         </ul>
                     </nav>
                 </div>
@@ -100,6 +100,9 @@
                                         <span class="menu-link px-5">Sign Out</span>
                                     </x-responsive-nav-link>
                                 </form>
+                            @else
+                                <a href="http://127.0.0.1:8000/login">Login</a>
+                                <a href="http://127.0.0.1:8000/register">Register</a>
                             @endif
                         </div>
                         <ul class="header__right__widget">
