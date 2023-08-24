@@ -2,8 +2,8 @@
 <!-- Categories Section Begin -->
 <section class="categories">
     <div class="container-fluid">
-        <div class="row">
-            @foreach ($categories as $category)
+        @foreach ($categories as $category)
+            <div class="row">
                 <div class="col-lg-6 p-0">
                     <div class="categories__item categories__large__item set-bg"
                         data-setbg="{{ asset('categories/thumbnails') . '/' . $category->thumbnail }}">
@@ -15,8 +15,8 @@
                     </div>
                 </div>
                 <div class="col-lg-6">
-                    @foreach ($subCategories as $subCategory)
-                        <div class="row">
+                    <div class="row">
+                        @foreach ($subCategories as $subCategory)
                             @if ($subCategory->parent_id == $category->id)
                                 <div class="col-lg-6 col-md-6 col-sm-6 p-0">
                                     <div class="categories__item set-bg"
@@ -29,11 +29,11 @@
                                     </div>
                                 </div>
                             @endif
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>
                 </div>
-            @endforeach
-        </div>
+            </div>
+        @endforeach
     </div>
 </section>
 <!-- Categories Section End -->
