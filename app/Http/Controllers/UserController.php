@@ -12,7 +12,7 @@ class UserController extends Controller
     {
         $categories = Category::select('id', 'name', 'thumbnail','description')->where('parent_id', '0')->where('status','1')->get();
         $subCategories = Category::select('name', 'parent_id', 'thumbnail')->where('parent_id', '!=', '0')->withCount('product')->get();
-    
-        return view('user.layouts.home', compact('categories', 'subCategories'));
+        $products = Product::select('id','name',)->with('productDetails');
+        return view('user.layouts.home', compact('categories', 'subCategories', 'products'));
     }
 }
